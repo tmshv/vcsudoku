@@ -1,0 +1,2 @@
+# vcsudoku
+Sudoku Vibe Coded
