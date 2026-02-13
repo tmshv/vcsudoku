@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [master]
 
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   ci:
     runs-on: ubuntu-latest
@@ -22,8 +26,14 @@ jobs:
       - name: Lint and format check
         run: npx biome check .
 
-      - name: Test
-        run: npm test
+      - name: Test with coverage
+        run: npm run coverage
+
+      - name: Report coverage
+        if: always()
+        uses: davelosert/vitest-coverage-report-action@v2
+        with:
+          file-coverage-mode: changes
 
       - name: Build
         run: npm run build
