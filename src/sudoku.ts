@@ -62,8 +62,29 @@ export function findEmptyCell(board: Board): [number, number] | null {
     return null
 }
 
+export function findMrvCell(board: Board): [number, number] | null {
+    let best: [number, number] | null = null
+    let bestCount = 10
+    for (let r = 0; r < 9; r++) {
+        for (let c = 0; c < 9; c++) {
+            if (board[r][c] === 0) {
+                let count = 0
+                for (let num = 1; num <= 9; num++) {
+                    if (isValidPlacement(board, r, c, num)) count++
+                }
+                if (count < bestCount) {
+                    bestCount = count
+                    best = [r, c]
+                    if (count === 0) return best
+                }
+            }
+        }
+    }
+    return best
+}
+
 function countSolutions(board: Board, limit: number): number {
-    const empty = findEmptyCell(board)
+    const empty = findMrvCell(board)
     if (!empty) return 1
 
     const [row, col] = empty

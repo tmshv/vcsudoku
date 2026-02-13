@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest"
 import {
     type Board,
     findEmptyCell,
+    findMrvCell,
     generatePuzzle,
     generateSolvedBoard,
     hasUniqueSolution,
@@ -59,6 +60,56 @@ describe("findEmptyCell", () => {
         const board = generateSolvedBoard()
         board[8][8] = 0
         expect(findEmptyCell(board)).toEqual([8, 8])
+    })
+})
+
+describe("findMrvCell", () => {
+    it("returns null for a fully filled board", () => {
+        const board = generateSolvedBoard()
+        expect(findMrvCell(board)).toBeNull()
+    })
+
+    it("returns the only empty cell when one cell is empty", () => {
+        const board = generateSolvedBoard()
+        board[4][6] = 0
+        expect(findMrvCell(board)).toEqual([4, 6])
+    })
+
+    it("picks the cell with fewest candidates", () => {
+        const board = emptyBoard()
+        // Fill row 0 except columns 0 and 8
+        // Row 0: [0, 2, 3, 4, 5, 6, 7, 8, 0]
+        board[0][1] = 2
+        board[0][2] = 3
+        board[0][3] = 4
+        board[0][4] = 5
+        board[0][5] = 6
+        board[0][6] = 7
+        board[0][7] = 8
+        // (0,0) candidates: 1, 9  (2 candidates)
+        // (0,8) candidates: 1, 9  (2 candidates) — same so far
+        // Add 1 in column 0 to further constrain (0,0) to just {9}
+        board[1][0] = 1
+        // Now (0,0) has only candidate 9 → 1 candidate
+        // (0,8) still has candidates 1 and 9 → 2 candidates
+        const result = findMrvCell(board)
+        expect(result).toEqual([0, 0])
+    })
+
+    it("early-returns a cell with zero candidates", () => {
+        const board = emptyBoard()
+        // Make (0,0) have zero candidates by putting 1-9 in its row
+        board[0][1] = 1
+        board[0][2] = 2
+        board[0][3] = 3
+        board[0][4] = 4
+        board[0][5] = 5
+        board[0][6] = 6
+        board[0][7] = 7
+        board[0][8] = 8
+        board[1][0] = 9 // blocks 9 via column
+        const result = findMrvCell(board)
+        expect(result).toEqual([0, 0])
     })
 })
 
