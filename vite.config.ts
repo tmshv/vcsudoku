@@ -5,13 +5,13 @@ import { defineConfig } from "vite"
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
-  test: {
-    environment: "jsdom",
-    coverage: {
-      provider: "v8",
-      reporter: ["text", "json-summary", "json"],
-      reportOnFailure: true,
+    plugins: [react()],
+    test: {
+        environment: "jsdom",
+        coverage: {
+            provider: "v8",
+            reporter: ["text", "json-summary", "json"],
+            reportOnFailure: true,
+        },
     },
-  },
 })
