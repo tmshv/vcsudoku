@@ -47,7 +47,9 @@ function App() {
                 }
                 onClear={game.clearCell}
                 onUndo={game.undo}
+                onRedo={game.redo}
                 undoDisabled={!game.canUndo}
+                redoDisabled={!game.canRedo}
                 notesMode={game.notesMode}
                 onToggleNotesMode={game.toggleNotesMode}
                 board={game.board}
