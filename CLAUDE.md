@@ -33,7 +33,7 @@ This is a browser-based Sudoku game. All source code is in `src/`.
 
 ### Pure logic
 
-- **`sudoku.ts`** — Board validation (`isValidPlacement`), backtracking solver (`solve`), puzzle generation (`generatePuzzle`) with difficulty-based cell removal counts (easy=45, medium=51, hard=56 cells removed).
+- **`sudoku.ts`** — Board validation (`isValidPlacement`), backtracking solver (`solve`), puzzle generation (`generatePuzzle`) with difficulty-based cell removal counts (easy=38, medium=46, hard=53 cells removed).
 
 ### Components
 

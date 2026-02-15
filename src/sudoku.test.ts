@@ -217,22 +217,22 @@ describe("generateSolvedBoard", () => {
 })
 
 describe("generatePuzzle", () => {
-    it("easy: puzzle has at most 36 filled cells", () => {
+    it("easy: puzzle has at least 43 filled cells", () => {
         const { puzzle } = generatePuzzle("easy")
         const filled = puzzle.flat().filter((v) => v !== 0).length
-        expect(filled).toBeGreaterThanOrEqual(81 - 45)
+        expect(filled).toBeGreaterThanOrEqual(81 - 38)
     })
 
-    it("medium: puzzle has at most 30 filled cells", () => {
+    it("medium: puzzle has at least 35 filled cells", () => {
         const { puzzle } = generatePuzzle("medium")
         const filled = puzzle.flat().filter((v) => v !== 0).length
-        expect(filled).toBeGreaterThanOrEqual(81 - 51)
+        expect(filled).toBeGreaterThanOrEqual(81 - 46)
     })
 
-    it("hard: puzzle has at most 25 filled cells", () => {
+    it("hard: puzzle has at least 28 filled cells", () => {
         const { puzzle } = generatePuzzle("hard")
         const filled = puzzle.flat().filter((v) => v !== 0).length
-        expect(filled).toBeGreaterThanOrEqual(81 - 56)
+        expect(filled).toBeGreaterThanOrEqual(81 - 53)
     })
 
     it("solution is a valid complete board", () => {
