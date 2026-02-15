@@ -335,15 +335,15 @@ h1 {
     transform: translateX(-50%);
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 20px;
     padding: 8px 16px;
-    background: #fff;
-    border: 1px solid #ddd;
+    background: transparent;
+    border: none;
     border-radius: 24px;
     font-size: 0.85rem;
     color: #555;
     z-index: 10;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: none;
     animation: status-fade-in 0.15s ease-out;
     white-space: nowrap;
 }
