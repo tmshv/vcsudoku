@@ -46,8 +46,12 @@ function App() {
                     game.notesMode ? game.toggleNote(n) : game.placeNumber(n)
                 }
                 onClear={game.clearCell}
+                onUndo={game.undo}
+                onRedo={game.redo}
+                undoDisabled={!game.canUndo}
+                redoDisabled={!game.canRedo}
                 notesMode={game.notesMode}
-                onToggleNotesMode={() => game.setNotesMode((m) => !m)}
+                onToggleNotesMode={game.toggleNotesMode}
                 board={game.board}
             />
 
