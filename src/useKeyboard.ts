@@ -53,6 +53,14 @@ export function useKeyboard() {
             } else if (e.key === "ArrowRight") {
                 e.preventDefault()
                 moveSelection(0, 1)
+            } else if (e.key === "h") {
+                moveSelection(0, -1)
+            } else if (e.key === "j") {
+                moveSelection(1, 0)
+            } else if (e.key === "k") {
+                moveSelection(-1, 0)
+            } else if (e.key === "l") {
+                moveSelection(0, 1)
             } else if (e.key === "n" || e.key === "N") {
                 toggleNotesMode()
             }
