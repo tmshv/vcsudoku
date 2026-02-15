@@ -31,6 +31,8 @@ function useStatusHint(): StatusHint | null {
         text: "",
         shortcuts: [
             { key: "\u2190\u2191\u2193\u2192", action: "move" }, // arrow keys
+            { key: "N", action: "notes" },
+            { key: "Shift+1\u20139", action: "note" },
             { key: "Space", action: "jump" },
         ],
     }
@@ -42,7 +44,9 @@ export function StatusBar() {
 
     return (
         <div className="status-bar">
-            {hint.label && <span className="status-bar-label">{hint.label}</span>}
+            {hint.label && (
+                <span className="status-bar-label">{hint.label}</span>
+            )}
             {hint.text && <span className="status-bar-text">{hint.text}</span>}
             {hint.shortcuts.map((s) => (
                 <span key={s.key} className="status-bar-shortcut">

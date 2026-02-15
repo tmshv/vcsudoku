@@ -5,6 +5,7 @@ import {
     placeNumber,
     redo,
     toggleNote,
+    toggleNotesMode,
     undo,
 } from "./store/gameStore"
 import { handleKey as jumpHandleKey } from "./store/jumpStore"
@@ -52,6 +53,8 @@ export function useKeyboard() {
             } else if (e.key === "ArrowRight") {
                 e.preventDefault()
                 moveSelection(0, 1)
+            } else if (e.key === "n" || e.key === "N") {
+                toggleNotesMode()
             }
         }
         window.addEventListener("keydown", handleKey)
