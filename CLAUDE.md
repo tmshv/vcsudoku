@@ -15,18 +15,36 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Tech Stack
 
-React 19, TypeScript 5.9, Vite 7, Vitest 4 with jsdom environment, @testing-library/react for hook testing. Node 24 (specified in `mise.toml`).
+React 19, TypeScript 5.9, Vite 7, Valtio 2 (with valtio-history for undo/redo), Vitest 4 with jsdom environment, @testing-library/react for hook testing. Node 24 (specified in `mise.toml`).
 
 ## Architecture
 
 This is a browser-based Sudoku game. All source code is in `src/`.
 
-- **`sudoku.ts`** — Pure logic: board validation (`isValidPlacement`), backtracking solver (`solve`), puzzle generation (`generatePuzzle`) with difficulty-based cell removal counts (easy=45, medium=51, hard=56 cells removed).
-- **`useGame.ts`** — Single React hook (`useGame`) that owns all game state: board, solution, selection, errors (checked against solution, not constraint-based), notes with auto-cleanup on placement, timer, and win detection. All game actions (placeNumber, clearCell, toggleNote, moveSelection, newGame) are exposed from this hook.
-- **`App.tsx`** — Root component. Composes the toolbar (difficulty buttons, timer), Board, NumberPad, and win overlay. Routes number pad input through notes mode toggle.
-- **`components/Board.tsx`** — Renders 9x9 grid, computes per-cell visual states (selected, highlighted row/col/box, same-number highlighting, errors).
-- **`components/Cell.tsx`** — Renders a single cell: value, notes (3x3 grid of candidate digits), or empty.
-- **`components/NumberPad.tsx`** — Number buttons 1-9 (disabled when all 9 instances placed), Notes toggle, Erase button.
+### Store layer
+
+- **`store/gameStore.ts`** — Two Valtio proxies: `gameData` (proxyWithHistory wrapping board + notes, enables undo/redo) and `gameUI` (plain proxy for solution, initial, selected, difficulty, elapsed, notesMode). All game mutations and derived computations (`computeErrors`, `computeWon`) live here.
+- **`store/jumpStore.ts`** — Jump mode state machine (Valtio proxy). Space activates, two digits (row, col) jump to a cell, Escape cancels. Provides `getOverlay` for cell coordinate labels.
+
+### Hooks
+
+- **`useGame.ts`** — Thin facade over the store. Subscribes to both proxies via `useSnapshot`, derives `errors` and `won` with `useMemo`, manages the timer interval, and re-exports store actions.
+- **`useKeyboard.ts`** — Centralized `keydown` handler: undo/redo (Ctrl+Z / Ctrl+Shift+Z / Ctrl+Y), digit placement, arrow keys, vim h/j/k/l movement, Shift+Arrow / H/J/K/L block-level jumps, N notes toggle, Space jump mode. Delegates to `jumpStore.handleKey` first.
+
+### Pure logic
+
+- **`sudoku.ts`** — Board validation (`isValidPlacement`), backtracking solver (`solve`), puzzle generation (`generatePuzzle`) with difficulty-based cell removal counts (easy=45, medium=51, hard=56 cells removed).
+
+### Components
+
+- **`App.tsx`** — Root component. Composes the toolbar (difficulty buttons, timer), Board, NumberPad, StatusBar, and win overlay.
+- **`components/Board.tsx`** — Renders 9x9 grid, computes per-cell visual states (selected, highlighted row/col/box, same-number highlighting, errors). Accepts an `overlay` render prop for jump mode labels.
+- **`components/Cell.tsx`** — Renders a single cell: value, notes (3x3 grid of candidate digits), overlay label, or empty.
+- **`components/NumberPad.tsx`** — Number buttons 1-9 (disabled when all 9 instances placed), Notes toggle, Erase button, Undo/Redo buttons.
+- **`components/StatusBar.tsx`** — Contextual shortcut hints. Shows jump mode prompts when active, default navigation shortcuts otherwise.
+
+### Styles
+
 - **`index.css`** — All styles in a single file.
 
 ## Style
@@ -38,3 +56,12 @@ This is a browser-based Sudoku game. All source code is in `src/`.
 
 - `sudoku.test.ts` tests pure logic directly.
 - `useGame.test.ts` mocks `generatePuzzle` from `./sudoku` via `vi.mock` to use a deterministic board, then tests the hook with `renderHook` from @testing-library/react. Uses `vi.useFakeTimers()` for timer tests.
+- `useGame.undo.test.ts` tests undo/redo through the hook with the same mock setup.
+- `store/gameStore.test.ts` tests store mutations and undo/redo directly against the Valtio proxies (no React rendering).
+- `store/jumpStore.test.ts` tests the jump mode state machine: activation, digit feeding, cell selection, and cancellation.
+
+### Valtio testing notes
+
+- `useSnapshot` uses microtask-based subscription -- tests need `await act(async () => ...)` instead of sync `act()`.
+- `vi.mock` is hoisted -- use `vi.hoisted()` to define test data (like SOLUTION) that the mock factory needs.
+- Store tests can read/mutate proxies directly; reset state in `beforeEach` by calling `newGame()`.
