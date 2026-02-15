@@ -1,5 +1,8 @@
+import { useSnapshot } from "valtio"
 import { Board } from "./components/Board"
 import { NumberPad } from "./components/NumberPad"
+import { StatusBar } from "./components/StatusBar"
+import { getOverlay, jumpState } from "./store/jumpStore"
 import type { Difficulty } from "./sudoku"
 import { useGame } from "./useGame"
 
@@ -11,6 +14,7 @@ function formatTime(seconds: number) {
 
 function App() {
     const game = useGame()
+    const jump = useSnapshot(jumpState)
 
     return (
         <div className="app">
@@ -39,6 +43,7 @@ function App() {
                 errors={game.errors}
                 notes={game.notes}
                 onSelectCell={game.selectCell}
+                overlay={jump.active ? getOverlay : undefined}
             />
 
             <NumberPad
@@ -54,6 +59,8 @@ function App() {
                 onToggleNotesMode={game.toggleNotesMode}
                 board={game.board}
             />
+
+            <StatusBar />
 
             {game.won && (
                 <div className="win-overlay">

@@ -1,3 +1,5 @@
+import type { CellOverlay } from "./Board"
+
 interface CellProps {
     value: number
     isInitial: boolean
@@ -6,6 +8,7 @@ interface CellProps {
     isSameNumber: boolean
     isError: boolean
     notes: readonly number[]
+    overlay?: CellOverlay | null
     onClick: () => void
 }
 
@@ -17,6 +20,7 @@ export function Cell({
     isSameNumber,
     isError,
     notes,
+    overlay,
     onClick,
 }: CellProps) {
     let className = "cell"
@@ -47,6 +51,13 @@ export function Cell({
                 </div>
             ) : (
                 ""
+            )}
+            {overlay && (
+                <div
+                    className={`cell-overlay${overlay.dimmed ? " cell-overlay-dimmed" : ""}`}
+                >
+                    <span className="cell-overlay-label">{overlay.label}</span>
+                </div>
             )}
         </div>
     )

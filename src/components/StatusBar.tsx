@@ -1,0 +1,46 @@
+import { useSnapshot } from "valtio"
+import { jumpState } from "../store/jumpStore"
+
+export interface StatusHint {
+    label: string
+    text: string
+    shortcuts: { key: string; action: string }[]
+}
+
+function useStatusHint(): StatusHint | null {
+    const jump = useSnapshot(jumpState)
+
+    if (jump.active) {
+        if (jump.firstDigit === null) {
+            return {
+                label: "JUMP",
+                text: "Press row digit 1\u20139",
+                shortcuts: [{ key: "Esc", action: "cancel" }],
+            }
+        }
+        return {
+            label: "JUMP",
+            text: `Row ${jump.firstDigit} \u2014 press column 1\u20139`,
+            shortcuts: [{ key: "Esc", action: "cancel" }],
+        }
+    }
+
+    return null
+}
+
+export function StatusBar() {
+    const hint = useStatusHint()
+    if (!hint) return null
+
+    return (
+        <div className="status-bar">
+            <span className="status-bar-label">{hint.label}</span>
+            <span className="status-bar-text">{hint.text}</span>
+            {hint.shortcuts.map((s) => (
+                <span key={s.key} className="status-bar-shortcut">
+                    <kbd>{s.key}</kbd> {s.action}
+                </span>
+            ))}
+        </div>
+    )
+}
