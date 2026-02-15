@@ -5,7 +5,7 @@ interface CellProps {
     isHighlighted: boolean
     isSameNumber: boolean
     isError: boolean
-    notes: Set<number>
+    notes: readonly number[]
     onClick: () => void
 }
 
@@ -26,7 +26,7 @@ export function Cell({
     if (isError) className += " cell-error"
     if (isInitial) className += " cell-initial"
 
-    const showNotes = value === 0 && notes.size > 0
+    const showNotes = value === 0 && notes.length > 0
 
     return (
         // biome-ignore lint/a11y/useSemanticElements: cell is a CSS grid item styled as div
@@ -42,7 +42,7 @@ export function Cell({
             ) : showNotes ? (
                 <div className="cell-notes">
                     {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
-                        <span key={n}>{notes.has(n) ? n : ""}</span>
+                        <span key={n}>{notes.includes(n) ? n : ""}</span>
                     ))}
                 </div>
             ) : (

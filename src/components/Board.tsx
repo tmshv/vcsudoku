@@ -6,7 +6,7 @@ interface BoardProps {
     initial: boolean[][]
     selected: CellPos | null
     errors: Set<string>
-    notes: Set<number>[][]
+    notes: readonly (readonly number[])[][]
     onSelectCell: (pos: CellPos) => void
 }
 

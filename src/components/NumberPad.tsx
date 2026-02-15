@@ -1,6 +1,8 @@
 interface NumberPadProps {
     onNumber: (n: number) => void
     onClear: () => void
+    onUndo: () => void
+    undoDisabled: boolean
     notesMode: boolean
     onToggleNotesMode: () => void
     board: number[][]
@@ -9,6 +11,8 @@ interface NumberPadProps {
 export function NumberPad({
     onNumber,
     onClear,
+    onUndo,
+    undoDisabled,
     notesMode,
     onToggleNotesMode,
     board,
@@ -42,6 +46,14 @@ export function NumberPad({
                 onClick={onToggleNotesMode}
             >
                 Notes
+            </button>
+            <button
+                type="button"
+                className="num-btn undo-btn"
+                disabled={undoDisabled}
+                onClick={onUndo}
+            >
+                Undo
             </button>
             <button
                 type="button"
