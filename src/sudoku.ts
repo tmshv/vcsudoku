@@ -119,9 +119,9 @@ export function generatePuzzle(difficulty: Difficulty): {
     const puzzle = solution.map((row) => [...row])
 
     const removals: Record<Difficulty, number> = {
-        easy: 45,
-        medium: 51,
-        hard: 56,
+        easy: 38,
+        medium: 46,
+        hard: 53,
     }
 
     const positions = shuffle(
