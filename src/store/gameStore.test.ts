@@ -42,6 +42,7 @@ import {
     gameData,
     gameUI,
     moveSelection,
+    moveSelectionToBlock,
     newGame,
     placeNumber,
     redo,
@@ -125,6 +126,55 @@ describe("moveSelection", () => {
         selectCell({ row: 0, col: 0 })
         moveSelection(-1, 0)
         expect(gameUI.selected).toEqual({ row: 0, col: 0 })
+    })
+})
+
+describe("moveSelectionToBlock", () => {
+    it("initializes to (0,0) when no selection", () => {
+        moveSelectionToBlock(1, 0)
+        expect(gameUI.selected).toEqual({ row: 0, col: 0 })
+    })
+
+    it("jumps forward to next block boundary", () => {
+        selectCell({ row: 0, col: 1 })
+        moveSelectionToBlock(0, 1)
+        expect(gameUI.selected).toEqual({ row: 0, col: 3 })
+    })
+
+    it("jumps backward to previous block boundary", () => {
+        selectCell({ row: 4, col: 7 })
+        moveSelectionToBlock(-1, -1)
+        expect(gameUI.selected).toEqual({ row: 3, col: 6 })
+    })
+
+    it("clamps at boundaries", () => {
+        selectCell({ row: 0, col: 0 })
+        moveSelectionToBlock(-1, -1)
+        expect(gameUI.selected).toEqual({ row: 0, col: 0 })
+
+        selectCell({ row: 8, col: 8 })
+        moveSelectionToBlock(1, 1)
+        expect(gameUI.selected).toEqual({ row: 8, col: 8 })
+    })
+
+    it("jumps forward from block boundary", () => {
+        selectCell({ row: 4, col: 3 })
+        moveSelectionToBlock(0, 1)
+        expect(gameUI.selected).toEqual({ row: 4, col: 6 })
+
+        selectCell({ row: 7, col: 6 })
+        moveSelectionToBlock(0, 1)
+        expect(gameUI.selected).toEqual({ row: 7, col: 8 })
+    })
+
+    it("jumps backward from block boundary", () => {
+        selectCell({ row: 4, col: 6 })
+        moveSelectionToBlock(0, -1)
+        expect(gameUI.selected).toEqual({ row: 4, col: 3 })
+
+        selectCell({ row: 4, col: 3 })
+        moveSelectionToBlock(0, -1)
+        expect(gameUI.selected).toEqual({ row: 4, col: 0 })
     })
 })
 

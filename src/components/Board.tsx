@@ -1,6 +1,11 @@
 import type { CellPos } from "../useGame"
 import { Cell } from "./Cell"
 
+export interface CellOverlay {
+    label: string
+    dimmed: boolean
+}
+
 interface BoardProps {
     board: number[][]
     initial: boolean[][]
@@ -8,6 +13,7 @@ interface BoardProps {
     errors: Set<string>
     notes: readonly (readonly number[])[][]
     onSelectCell: (pos: CellPos) => void
+    overlay?: (row: number, col: number) => CellOverlay | null
 }
 
 export function Board({
@@ -17,6 +23,7 @@ export function Board({
     errors,
     notes,
     onSelectCell,
+    overlay,
 }: BoardProps) {
     const selectedValue = selected ? board[selected.row][selected.col] : 0
 
@@ -52,6 +59,7 @@ export function Board({
                             isSameNumber={isSameNumber}
                             isError={isError}
                             notes={notes[r][c]}
+                            overlay={overlay?.(r, c)}
                             onClick={() => onSelectCell({ row: r, col: c })}
                         />
                     )

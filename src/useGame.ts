@@ -7,7 +7,6 @@ import {
     computeWon,
     gameData,
     gameUI,
-    moveSelection,
     newGame,
     placeNumber,
     redo,
@@ -17,6 +16,7 @@ import {
     toggleNotesMode,
     undo,
 } from "./store/gameStore"
+import { useKeyboard } from "./useKeyboard"
 
 export type { CellPos }
 
@@ -51,51 +51,7 @@ export function useGame() {
         return () => clearInterval(timerRef.current)
     }, [])
 
-    useEffect(() => {
-        const handleKey = (e: KeyboardEvent) => {
-            if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === "Z") {
-                e.preventDefault()
-                redo()
-                return
-            }
-            if ((e.ctrlKey || e.metaKey) && (e.key === "z" || e.key === "Z")) {
-                e.preventDefault()
-                undo()
-                return
-            }
-            if ((e.ctrlKey || e.metaKey) && e.key === "y") {
-                e.preventDefault()
-                redo()
-                return
-            }
-
-            const digitMatch = e.code.match(/^Digit([1-9])$/)
-            if (digitMatch) {
-                const num = Number.parseInt(digitMatch[1], 10)
-                if (e.shiftKey) {
-                    toggleNote(num)
-                } else {
-                    placeNumber(num)
-                }
-            } else if (e.key === "Backspace" || e.key === "Delete") {
-                clearCell()
-            } else if (e.key === "ArrowUp") {
-                e.preventDefault()
-                moveSelection(-1, 0)
-            } else if (e.key === "ArrowDown") {
-                e.preventDefault()
-                moveSelection(1, 0)
-            } else if (e.key === "ArrowLeft") {
-                e.preventDefault()
-                moveSelection(0, -1)
-            } else if (e.key === "ArrowRight") {
-                e.preventDefault()
-                moveSelection(0, 1)
-            }
-        }
-        window.addEventListener("keydown", handleKey)
-        return () => window.removeEventListener("keydown", handleKey)
-    }, [])
+    useKeyboard()
 
     return {
         board: dataSnap.value.board as number[][],

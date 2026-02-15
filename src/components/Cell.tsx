@@ -1,3 +1,5 @@
+import type { CellOverlay } from "./Board"
+
 interface CellProps {
     value: number
     isInitial: boolean
@@ -6,6 +8,7 @@ interface CellProps {
     isSameNumber: boolean
     isError: boolean
     notes: readonly number[]
+    overlay?: CellOverlay | null
     onClick: () => void
 }
 
@@ -17,6 +20,7 @@ export function Cell({
     isSameNumber,
     isError,
     notes,
+    overlay,
     onClick,
 }: CellProps) {
     let className = "cell"
@@ -29,14 +33,9 @@ export function Cell({
     const showNotes = value === 0 && notes.length > 0
 
     return (
-        // biome-ignore lint/a11y/useSemanticElements: cell is a CSS grid item styled as div
-        <div
-            className={className}
-            onClick={onClick}
-            onKeyDown={onClick}
-            role="button"
-            tabIndex={-1}
-        >
+        // biome-ignore lint/a11y/useKeyWithClickEvents: keyboard handled globally via window keydown
+        // biome-ignore lint/a11y/noStaticElementInteractions: keyboard handled globally via window keydown
+        <div className={className} onClick={onClick}>
             {value !== 0 ? (
                 value
             ) : showNotes ? (
@@ -47,6 +46,13 @@ export function Cell({
                 </div>
             ) : (
                 ""
+            )}
+            {overlay && (
+                <div
+                    className={`cell-overlay${overlay.dimmed ? " cell-overlay-dimmed" : ""}`}
+                >
+                    <span className="cell-overlay-label">{overlay.label}</span>
+                </div>
             )}
         </div>
     )
