@@ -56,7 +56,6 @@ function makeKeyEvent(
     overrides: Partial<KeyboardEvent> & { key: string },
 ): KeyboardEvent {
     return {
-        key: overrides.key,
         code: overrides.code ?? "",
         ctrlKey: false,
         metaKey: false,
