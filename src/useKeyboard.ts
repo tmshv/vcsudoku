@@ -2,6 +2,7 @@ import { useEffect } from "react"
 import {
     clearCell,
     moveSelection,
+    moveSelectionToBlock,
     placeNumber,
     redo,
     toggleNote,
@@ -41,6 +42,18 @@ export function useKeyboard() {
                 }
             } else if (e.key === "Backspace" || e.key === "Delete") {
                 clearCell()
+            } else if (e.shiftKey && e.key === "ArrowUp") {
+                e.preventDefault()
+                moveSelectionToBlock(-1, 0)
+            } else if (e.shiftKey && e.key === "ArrowDown") {
+                e.preventDefault()
+                moveSelectionToBlock(1, 0)
+            } else if (e.shiftKey && e.key === "ArrowLeft") {
+                e.preventDefault()
+                moveSelectionToBlock(0, -1)
+            } else if (e.shiftKey && e.key === "ArrowRight") {
+                e.preventDefault()
+                moveSelectionToBlock(0, 1)
             } else if (e.key === "ArrowUp") {
                 e.preventDefault()
                 moveSelection(-1, 0)
@@ -53,6 +66,14 @@ export function useKeyboard() {
             } else if (e.key === "ArrowRight") {
                 e.preventDefault()
                 moveSelection(0, 1)
+            } else if (e.key === "H") {
+                moveSelectionToBlock(0, -1)
+            } else if (e.key === "J") {
+                moveSelectionToBlock(1, 0)
+            } else if (e.key === "K") {
+                moveSelectionToBlock(-1, 0)
+            } else if (e.key === "L") {
+                moveSelectionToBlock(0, 1)
             } else if (e.key === "h") {
                 moveSelection(0, -1)
             } else if (e.key === "j") {

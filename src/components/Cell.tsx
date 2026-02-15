@@ -33,14 +33,9 @@ export function Cell({
     const showNotes = value === 0 && notes.length > 0
 
     return (
-        // biome-ignore lint/a11y/useSemanticElements: cell is a CSS grid item styled as div
-        <div
-            className={className}
-            onClick={onClick}
-            onKeyDown={onClick}
-            role="button"
-            tabIndex={-1}
-        >
+        // biome-ignore lint/a11y/useKeyWithClickEvents: keyboard handled globally via window keydown
+        // biome-ignore lint/a11y/noStaticElementInteractions: keyboard handled globally via window keydown
+        <div className={className} onClick={onClick}>
             {value !== 0 ? (
                 value
             ) : showNotes ? (

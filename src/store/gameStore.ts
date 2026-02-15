@@ -102,6 +102,23 @@ export function moveSelection(dr: number, dc: number) {
     }
 }
 
+function nextBlockPos(pos: number, dir: number): number {
+    if (dir > 0) return Math.min(8, (Math.floor(pos / 3) + 1) * 3)
+    if (dir < 0) return Math.max(0, (Math.ceil(pos / 3) - 1) * 3)
+    return pos
+}
+
+export function moveSelectionToBlock(dr: number, dc: number) {
+    if (!gameUI.selected) {
+        gameUI.selected = { row: 0, col: 0 }
+        return
+    }
+    gameUI.selected = {
+        row: nextBlockPos(gameUI.selected.row, dr),
+        col: nextBlockPos(gameUI.selected.col, dc),
+    }
+}
+
 export function placeNumber(num: number) {
     const sel = gameUI.selected
     if (!sel) return

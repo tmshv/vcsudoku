@@ -5,13 +5,11 @@
 }
 
 /* Focus: hide default outline on click, show styled ring on keyboard nav */
-button:focus:not(:focus-visible),
-.cell:focus:not(:focus-visible) {
+button:focus:not(:focus-visible) {
     outline: none;
 }
 
-button:focus-visible,
-.cell:focus-visible {
+button:focus-visible {
     outline: 2px solid var(--color-primary);
     outline-offset: -2px;
 }
