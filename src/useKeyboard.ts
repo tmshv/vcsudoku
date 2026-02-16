@@ -1,4 +1,5 @@
 import { useEffect } from "react"
+import { handleKey as findHandleKey } from "./store/findStore"
 import {
     clearCell,
     gameUI,
@@ -16,6 +17,7 @@ export function useKeyboard() {
     useEffect(() => {
         const handleKey = (e: KeyboardEvent) => {
             if (jumpHandleKey(e)) return
+            if (findHandleKey(e)) return
 
             if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === "Z") {
                 e.preventDefault()

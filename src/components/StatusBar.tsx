@@ -1,4 +1,5 @@
 import { useSnapshot } from "valtio"
+import { findState } from "../store/findStore"
 import { jumpState } from "../store/jumpStore"
 
 export interface StatusHint {
@@ -9,6 +10,15 @@ export interface StatusHint {
 
 function useStatusHint(): StatusHint | null {
     const jump = useSnapshot(jumpState)
+    const find = useSnapshot(findState)
+
+    if (find.active) {
+        return {
+            label: "FIND",
+            text: "Press digit 1\u20139 to jump",
+            shortcuts: [{ key: "Esc", action: "cancel" }],
+        }
+    }
 
     if (jump.active) {
         if (jump.firstDigit === null) {
@@ -34,6 +44,7 @@ function useStatusHint(): StatusHint | null {
             { key: "N", action: "notes" },
             { key: "Shift+1\u20139", action: "note" },
             { key: "Space", action: "jump" },
+            { key: "F", action: "find" },
         ],
     }
 }
