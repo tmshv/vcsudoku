@@ -188,7 +188,7 @@ h1 {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 8px;
+    gap: 6px;
     margin-top: 20px;
     max-width: calc(
         var(--cell-size) *
@@ -202,8 +202,8 @@ h1 {
 }
 
 .num-btn {
-    width: calc(var(--cell-size) * 0.95);
-    height: calc(var(--cell-size) * 0.95);
+    width: calc(var(--cell-size) * 0.85);
+    height: calc(var(--cell-size) * 0.85);
     border: 1px solid #ccc;
     border-radius: 8px;
     background: #fff;
