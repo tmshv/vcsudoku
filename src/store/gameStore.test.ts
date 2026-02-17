@@ -39,6 +39,8 @@ import {
     clearCell,
     computeErrors,
     computeWon,
+    fillLastDigit,
+    findLastOneCell,
     gameData,
     gameUI,
     moveSelection,
@@ -404,5 +406,110 @@ describe("undo/redo", () => {
         newGame("easy")
         expect(gameData.isUndoEnabled).toBe(false)
         expect(gameData.isRedoEnabled).toBe(false)
+    })
+})
+
+describe("findLastOneCell", () => {
+    it("returns null when selected is null", () => {
+        const board = makePuzzle()
+        expect(findLastOneCell(board, null)).toBeNull()
+    })
+
+    it("returns the row's single empty cell", () => {
+        // Row 4 has exactly 1 empty cell at [4][4]
+        const board = makePuzzle()
+        expect(findLastOneCell(board, { row: 4, col: 0 })).toEqual({
+            row: 4,
+            col: 4,
+        })
+    })
+
+    it("falls back to column when row has >1 empty", () => {
+        // Row 0 has 2 empties ([0][0], [0][1]), col 0 has 1 empty ([0][0])
+        const board = makePuzzle()
+        expect(findLastOneCell(board, { row: 0, col: 0 })).toEqual({
+            row: 0,
+            col: 0,
+        })
+    })
+
+    it("falls back to box when row and col both have >1 empty", () => {
+        const board = SOLUTION.map((r) => [...r])
+        board[0][0] = 0 // box(0,0)
+        board[2][5] = 0 // row 2 empty #1
+        board[2][7] = 0 // row 2 empty #2
+        board[5][2] = 0 // col 2 empty #1
+        board[7][2] = 0 // col 2 empty #2
+        // Cursor at (2,2): row 2 has 2 empties, col 2 has 2 empties,
+        // box(0,0) has 1 empty at [0][0]
+        expect(findLastOneCell(board, { row: 2, col: 2 })).toEqual({
+            row: 0,
+            col: 0,
+        })
+    })
+
+    it("returns null when row, col, and box all have >1 empty", () => {
+        const board = SOLUTION.map((r) => [...r])
+        board[0][0] = 0 // box(0,0) empty #1
+        board[1][1] = 0 // box(0,0) empty #2
+        board[2][5] = 0 // row 2 empty #1
+        board[2][7] = 0 // row 2 empty #2
+        board[5][2] = 0 // col 2 empty #1
+        board[7][2] = 0 // col 2 empty #2
+        // Cursor at (2,2): all groups have >1 empty
+        expect(findLastOneCell(board, { row: 2, col: 2 })).toBeNull()
+    })
+
+    it("prefers row match over column match", () => {
+        const board = SOLUTION.map((r) => [...r])
+        board[0][3] = 0 // row 0 single empty at col 3
+        board[5][0] = 0 // col 0 single empty at row 5
+        // Cursor at (0,0): row 0 has 1 empty → returns row's cell
+        expect(findLastOneCell(board, { row: 0, col: 0 })).toEqual({
+            row: 0,
+            col: 3,
+        })
+    })
+})
+
+describe("fillLastDigit", () => {
+    it("fills the correct digit from solution", () => {
+        // Row 4 has 1 empty at [4][4], solution is 5
+        selectCell({ row: 4, col: 0 })
+        fillLastDigit()
+        expect(gameData.value.board[4][4]).toBe(5)
+    })
+
+    it("clears notes from the filled cell", () => {
+        selectCell({ row: 4, col: 4 })
+        toggleNote(1)
+        expect(gameData.value.notes[4][4]).toContain(1)
+        selectCell({ row: 4, col: 0 })
+        fillLastDigit()
+        expect(gameData.value.notes[4][4]).toEqual([])
+    })
+
+    it("strips placed digit from peer notes", () => {
+        // Directly set note 5 on a peer cell in row 4
+        gameData.value.notes[4][3] = [5]
+        expect(gameData.value.notes[4][3]).toContain(5)
+        selectCell({ row: 4, col: 0 })
+        fillLastDigit()
+        expect(gameData.value.notes[4][3]).not.toContain(5)
+    })
+
+    it("does nothing when no last-one-cell exists", () => {
+        const boardBefore = gameData.value.board.map((r) => [...r])
+        // No selection → findLastOneCell returns null
+        fillLastDigit()
+        expect(gameData.value.board.map((r) => [...r])).toEqual(boardBefore)
+    })
+
+    it("saves to undo history", () => {
+        selectCell({ row: 4, col: 0 })
+        fillLastDigit()
+        expect(gameData.value.board[4][4]).toBe(5)
+        undo()
+        expect(gameData.value.board[4][4]).toBe(0)
     })
 })

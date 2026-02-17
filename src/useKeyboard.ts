@@ -2,6 +2,9 @@ import { useEffect } from "react"
 import { handleKey as findHandleKey } from "./store/findStore"
 import {
     clearCell,
+    fillLastDigit,
+    findLastOneCell,
+    gameData,
     gameUI,
     moveSelection,
     moveSelectionToBlock,
@@ -87,6 +90,10 @@ export function useKeyboard() {
                 moveSelection(0, 1)
             } else if (e.key === "n" || e.key === "N") {
                 toggleNotesMode()
+            } else if (e.key === "x") {
+                if (findLastOneCell(gameData.value.board, gameUI.selected)) {
+                    fillLastDigit()
+                }
             }
         }
         window.addEventListener("keydown", handleKey)

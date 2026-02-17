@@ -1,5 +1,11 @@
 import { useSnapshot } from "valtio"
 import { findState } from "../store/findStore"
+import {
+    type CellPos,
+    findLastOneCell,
+    gameData,
+    gameUI,
+} from "../store/gameStore"
 import { jumpState } from "../store/jumpStore"
 
 export interface StatusHint {
@@ -11,6 +17,13 @@ export interface StatusHint {
 function useStatusHint(): StatusHint | null {
     const jump = useSnapshot(jumpState)
     const find = useSnapshot(findState)
+    const dataSnap = useSnapshot(gameData)
+    const uiSnap = useSnapshot(gameUI)
+    const hasLastOne =
+        findLastOneCell(
+            dataSnap.value.board as number[][],
+            uiSnap.selected as CellPos | null,
+        ) !== null
 
     if (find.active) {
         return {
@@ -36,16 +49,20 @@ function useStatusHint(): StatusHint | null {
     }
 
     // Default: show basic navigation shortcuts
+    const shortcuts = [
+        { key: "\u2190\u2191\u2193\u2192", action: "move" }, // arrow keys
+        { key: "N", action: "notes" },
+        { key: "Shift+1\u20139", action: "note" },
+        { key: "Space", action: "jump" },
+        { key: "F", action: "find" },
+    ]
+    if (hasLastOne) {
+        shortcuts.push({ key: "X", action: "last one" })
+    }
     return {
         label: "",
         text: "",
-        shortcuts: [
-            { key: "\u2190\u2191\u2193\u2192", action: "move" }, // arrow keys
-            { key: "N", action: "notes" },
-            { key: "Shift+1\u20139", action: "note" },
-            { key: "Space", action: "jump" },
-            { key: "F", action: "find" },
-        ],
+        shortcuts,
     }
 }
 
