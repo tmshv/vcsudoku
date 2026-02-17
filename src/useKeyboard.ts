@@ -38,7 +38,7 @@ export function useKeyboard() {
             const digitMatch = e.code.match(/^Digit([1-9])$/)
             if (digitMatch) {
                 const num = Number.parseInt(digitMatch[1], 10)
-                if (e.shiftKey || gameUI.notesMode) {
+                if (e.shiftKey !== gameUI.notesMode) {
                     toggleNote(num)
                 } else {
                     placeNumber(num)
