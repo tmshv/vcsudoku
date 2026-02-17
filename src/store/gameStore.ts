@@ -205,6 +205,91 @@ export function newGame(difficulty: Difficulty) {
     gameUI.notesMode = ui.notesMode
 }
 
+export function findLastOneCell(
+    board: Board,
+    selected: CellPos | null,
+): CellPos | null {
+    if (!selected) return null
+
+    // Check cursor's row
+    {
+        let emptyCol = -1
+        let emptyCount = 0
+        for (let c = 0; c < 9; c++) {
+            if (board[selected.row][c] === 0) {
+                emptyCol = c
+                emptyCount++
+                if (emptyCount > 1) break
+            }
+        }
+        if (emptyCount === 1) return { row: selected.row, col: emptyCol }
+    }
+
+    // Check cursor's column
+    {
+        let emptyRow = -1
+        let emptyCount = 0
+        for (let r = 0; r < 9; r++) {
+            if (board[r][selected.col] === 0) {
+                emptyRow = r
+                emptyCount++
+                if (emptyCount > 1) break
+            }
+        }
+        if (emptyCount === 1) return { row: emptyRow, col: selected.col }
+    }
+
+    // Check cursor's 3x3 box
+    {
+        const boxR = Math.floor(selected.row / 3) * 3
+        const boxC = Math.floor(selected.col / 3) * 3
+        let emptyR = -1
+        let emptyC = -1
+        let emptyCount = 0
+        for (let i = 0; i < 9; i++) {
+            const r = boxR + Math.floor(i / 3)
+            const c = boxC + (i % 3)
+            if (board[r][c] === 0) {
+                emptyR = r
+                emptyC = c
+                emptyCount++
+                if (emptyCount > 1) break
+            }
+        }
+        if (emptyCount === 1) return { row: emptyR, col: emptyC }
+    }
+
+    return null
+}
+
+export function fillLastDigit() {
+    const pos = findLastOneCell(gameData.value.board, gameUI.selected)
+    if (!pos) return
+
+    const num = gameUI.solution[pos.row][pos.col]
+
+    gameData.value.board[pos.row][pos.col] = num
+    gameData.value.notes[pos.row][pos.col] = []
+
+    const boxR = Math.floor(pos.row / 3) * 3
+    const boxC = Math.floor(pos.col / 3) * 3
+    for (let i = 0; i < 9; i++) {
+        gameData.value.notes[pos.row][i] = gameData.value.notes[pos.row][
+            i
+        ].filter((n) => n !== num)
+        gameData.value.notes[i][pos.col] = gameData.value.notes[i][
+            pos.col
+        ].filter((n) => n !== num)
+        const br = boxR + Math.floor(i / 3)
+        const bc = boxC + (i % 3)
+        gameData.value.notes[br][bc] = gameData.value.notes[br][bc].filter(
+            (n) => n !== num,
+        )
+    }
+
+    gameData.saveHistory()
+}
+
 export function undo() {
     gameData.undo()
 }
