@@ -258,6 +258,32 @@ describe("newGame", () => {
     })
 })
 
+describe("x – last digit fill", () => {
+    async function pressKey(key: string) {
+        await act(async () => {
+            window.dispatchEvent(new KeyboardEvent("keydown", { key }))
+        })
+    }
+
+    it("pressing x fills last digit when available", async () => {
+        const { result } = renderGame()
+        // Row 4 has 1 empty at [4][4], solution = 5
+        await act(async () => result.current.selectCell({ row: 4, col: 0 }))
+        await pressKey("x")
+        expect(result.current.board[4][4]).toBe(5)
+    })
+
+    it("pressing x does nothing when no last-one-cell", async () => {
+        const { result } = renderGame()
+        const boardBefore = result.current.board.map((r: number[]) => [...r])
+        // No selection → no match
+        await pressKey("x")
+        expect(result.current.board.map((r: number[]) => [...r])).toEqual(
+            boardBefore,
+        )
+    })
+})
+
 describe("win condition", () => {
     it("detects win when all cells match solution", async () => {
         const { result } = renderGame()
