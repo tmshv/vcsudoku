@@ -35,6 +35,22 @@ export function Board({
     for (const [digit, count] of digitCounts)
         if (count >= 9) completedDigits.add(digit)
 
+    const completedRows = new Set<number>()
+    const completedCols = new Set<number>()
+    const completedBoxes = new Set<number>()
+    for (let r = 0; r < 9; r++)
+        if (board[r].every((v) => v !== 0)) completedRows.add(r)
+    for (let c = 0; c < 9; c++)
+        if (board.every((row) => row[c] !== 0)) completedCols.add(c)
+    for (let br = 0; br < 3; br++)
+        for (let bc = 0; bc < 3; bc++) {
+            let full = true
+            for (let r = br * 3; r < br * 3 + 3 && full; r++)
+                for (let c = bc * 3; c < bc * 3 + 3 && full; c++)
+                    if (board[r][c] === 0) full = false
+            if (full) completedBoxes.add(br * 3 + bc)
+        }
+
     return (
         <div className="board">
             {board.map((row, r) =>
@@ -55,6 +71,12 @@ export function Board({
                         selectedValue !== 0 &&
                         value === selectedValue
                     const isError = errors.has(`${r},${c}`)
+                    const isLineComplete =
+                        completedRows.has(r) ||
+                        completedCols.has(c) ||
+                        completedBoxes.has(
+                            Math.floor(r / 3) * 3 + Math.floor(c / 3),
+                        )
 
                     return (
                         <Cell
@@ -67,6 +89,7 @@ export function Board({
                             isSameNumber={isSameNumber}
                             isError={isError}
                             isDigitComplete={completedDigits.has(value)}
+                            isLineComplete={isLineComplete}
                             notes={notes[r][c]}
                             overlay={overlay?.(r, c)}
                             onClick={() => onSelectCell({ row: r, col: c })}

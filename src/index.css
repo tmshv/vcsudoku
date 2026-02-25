@@ -150,6 +150,23 @@ h1 {
     color: #adb5bd;
 }
 
+@keyframes line-complete-flash {
+    0% {
+        background: rgba(76, 175, 80, 0.45);
+    }
+    100% {
+        background: rgba(76, 175, 80, 0);
+    }
+}
+
+.cell-line-complete::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    animation: line-complete-flash 0.7s ease-out;
+}
+
 .cell-highlighted {
     background: var(--color-highlighted);
 }

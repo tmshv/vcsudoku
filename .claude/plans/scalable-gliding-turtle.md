@@ -70,6 +70,10 @@ The `isDigitComplete` flag must NOT override error color — only apply the dim 
 
 ## Task 3: Animate completed row/column/box
 
+- [x] Compute `completedRows`, `completedCols`, `completedBoxes` in `Board.tsx` and pass `isLineComplete` to `Cell`
+- [x] Add `isLineComplete` prop to `Cell.tsx` and apply `.cell-line-complete` class
+- [x] Add `@keyframes line-complete-flash` and `.cell-line-complete::after` CSS rule in `index.css`
+
 **Problem:** No visual feedback when a row, column, or 3×3 box becomes fully filled.
 
 **Approach:** In `Board.tsx`, compute which rows/cols/boxes are fully filled (no zeros). Pass `isLineComplete` to each `Cell`. In CSS, use a `::after` pseudo-element with a one-shot keyframe animation (green flash that fades out). The animation fires naturally when the class is added to a DOM element.
