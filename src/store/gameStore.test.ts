@@ -570,6 +570,16 @@ describe("fillCandidateNotes", () => {
         expect(gameData.value.notes[0][0]).toEqual([])
     })
 
+    it("no-ops when notes already match candidates — does not add undo entry", () => {
+        selectCell({ row: 0, col: 0 })
+        fillCandidateNotes()
+        expect(gameData.value.notes[0][0]).toEqual([5])
+        const historyIndexAfterFirst = gameData.history.index
+        fillCandidateNotes()
+        expect(gameData.history.index).toBe(historyIndexAfterFirst)
+        expect(gameData.value.notes[0][0]).toEqual([5])
+    })
+
     it("no-ops when game is won", () => {
         selectCell({ row: 0, col: 0 })
         placeNumber(5)
@@ -621,6 +631,13 @@ describe("fillAllCandidateNotes", () => {
         expect(gameData.value.notes[0][1]).toEqual([])
         expect(gameData.value.notes[4][4]).toEqual([])
         expect(gameData.value.notes[8][8]).toEqual([])
+    })
+
+    it("no-ops when all notes already match candidates — does not add undo entry", () => {
+        fillAllCandidateNotes()
+        const historyIndexAfterFirst = gameData.history.index
+        fillAllCandidateNotes()
+        expect(gameData.history.index).toBe(historyIndexAfterFirst)
     })
 
     it("no-ops when game is won", () => {
