@@ -8,6 +8,7 @@ interface NumberPadProps {
     notesMode: boolean
     onToggleNotesMode: () => void
     board: number[][]
+    errors: Set<string>
 }
 
 export function NumberPad({
@@ -20,11 +21,14 @@ export function NumberPad({
     notesMode,
     onToggleNotesMode,
     board,
+    errors,
 }: NumberPadProps) {
     const counts = new Map<number, number>()
-    for (const row of board) {
-        for (const v of row) {
-            if (v !== 0) counts.set(v, (counts.get(v) ?? 0) + 1)
+    for (let r = 0; r < board.length; r++) {
+        for (let c = 0; c < board[r].length; c++) {
+            const v = board[r][c]
+            if (v !== 0 && !errors.has(`${r},${c}`))
+                counts.set(v, (counts.get(v) ?? 0) + 1)
         }
     }
 

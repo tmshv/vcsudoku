@@ -44,7 +44,6 @@ function App() {
                 selected={game.selected}
                 errors={game.errors}
                 notes={game.notes}
-                won={game.won}
                 onSelectCell={game.selectCell}
                 overlay={jump.active ? getOverlay : undefined}
             />
@@ -61,6 +60,7 @@ function App() {
                 notesMode={game.notesMode}
                 onToggleNotesMode={game.toggleNotesMode}
                 board={game.board}
+                errors={game.errors}
             />
 
             <StatusBar />
