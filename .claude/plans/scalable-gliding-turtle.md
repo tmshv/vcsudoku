@@ -51,6 +51,8 @@ The `isDigitComplete` flag must NOT override error color — only apply the dim 
 
 ## Task 2: Fix status bar on mobile
 
+- [x] Remove fixed positioning from `.status-bar` and allow shortcut items to wrap
+
 **Problem:** `.status-bar` uses `position: fixed; bottom: 20px` and `white-space: nowrap`. On narrow mobile screens the bar overlaps the number pad or clips off screen.
 
 **Approach:** Remove fixed positioning. Let the status bar flow normally in the document (it's already placed after `<NumberPad>` in `App.tsx`). Allow shortcut items to wrap.

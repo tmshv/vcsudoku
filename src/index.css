@@ -331,23 +331,20 @@ h1 {
 
 /* Status bar */
 .status-bar {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 20px;
     padding: 8px 16px;
+    margin-top: 12px;
     background: transparent;
     border: none;
     border-radius: 24px;
     font-size: 0.85rem;
     color: #555;
-    z-index: 10;
     box-shadow: none;
     animation: status-fade-in 0.15s ease-out;
-    white-space: nowrap;
 }
 
 .status-bar-label {
