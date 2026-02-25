@@ -27,6 +27,14 @@ export function Board({
 }: BoardProps) {
     const selectedValue = selected ? board[selected.row][selected.col] : 0
 
+    const completedDigits = new Set<number>()
+    const digitCounts = new Map<number, number>()
+    for (const row of board)
+        for (const v of row)
+            if (v !== 0) digitCounts.set(v, (digitCounts.get(v) ?? 0) + 1)
+    for (const [digit, count] of digitCounts)
+        if (count >= 9) completedDigits.add(digit)
+
     return (
         <div className="board">
             {board.map((row, r) =>
@@ -58,6 +66,7 @@ export function Board({
                             isHighlighted={isHighlighted}
                             isSameNumber={isSameNumber}
                             isError={isError}
+                            isDigitComplete={completedDigits.has(value)}
                             notes={notes[r][c]}
                             overlay={overlay?.(r, c)}
                             onClick={() => onSelectCell({ row: r, col: c })}

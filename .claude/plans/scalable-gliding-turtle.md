@@ -13,6 +13,10 @@ Five independent improvements to the Sudoku game's UI/UX:
 
 ## Task 1: Digit-complete visual on the board
 
+- [x] Compute `completedDigits` in `Board.tsx` and pass `isDigitComplete` to `Cell`
+- [x] Add `isDigitComplete` prop to `Cell.tsx` and apply `.cell-digit-complete` class
+- [x] Add `.cell-digit-complete` CSS rule in `index.css`
+
 **Problem:** When all 9 of a digit are placed, only the number pad button dims. The board cells look identical to uncompleted digits.
 
 **Approach:** Pass a `Set<number>` of completed digits down to each `Cell`. Apply a `.cell-digit-complete` class that dims the cell's text — signaling the digit is fully placed without being distracting.

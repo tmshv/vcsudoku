@@ -7,6 +7,7 @@ interface CellProps {
     isHighlighted: boolean
     isSameNumber: boolean
     isError: boolean
+    isDigitComplete: boolean
     notes: readonly number[]
     overlay?: CellOverlay | null
     onClick: () => void
@@ -19,6 +20,7 @@ export function Cell({
     isHighlighted,
     isSameNumber,
     isError,
+    isDigitComplete,
     notes,
     overlay,
     onClick,
@@ -27,6 +29,7 @@ export function Cell({
     if (isSelected) className += " cell-selected"
     else if (isSameNumber) className += " cell-same-number"
     else if (isHighlighted) className += " cell-highlighted"
+    if (isDigitComplete) className += " cell-digit-complete"
     if (isError) className += " cell-error"
     if (isInitial) className += " cell-initial"
 

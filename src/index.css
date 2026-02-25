@@ -146,6 +146,10 @@ h1 {
     font-weight: 700;
 }
 
+.cell-digit-complete {
+    color: #adb5bd;
+}
+
 .cell-highlighted {
     background: var(--color-highlighted);
 }
