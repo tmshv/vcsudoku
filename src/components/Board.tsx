@@ -39,15 +39,21 @@ export function Board({
     const completedCols = new Set<number>()
     const completedBoxes = new Set<number>()
     for (let r = 0; r < 9; r++)
-        if (board[r].every((v) => v !== 0)) completedRows.add(r)
+        if (
+            board[r].every((v) => v !== 0) &&
+            !board[r].some((_, c) => errors.has(`${r},${c}`))
+        )
+            completedRows.add(r)
     for (let c = 0; c < 9; c++)
-        if (board.every((row) => row[c] !== 0)) completedCols.add(c)
+        if (board.every((row, r) => row[c] !== 0 && !errors.has(`${r},${c}`)))
+            completedCols.add(c)
     for (let br = 0; br < 3; br++)
         for (let bc = 0; bc < 3; bc++) {
             let full = true
             for (let r = br * 3; r < br * 3 + 3 && full; r++)
                 for (let c = bc * 3; c < bc * 3 + 3 && full; c++)
-                    if (board[r][c] === 0) full = false
+                    if (board[r][c] === 0 || errors.has(`${r},${c}`))
+                        full = false
             if (full) completedBoxes.add(br * 3 + bc)
         }
 
