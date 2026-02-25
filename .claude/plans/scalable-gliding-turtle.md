@@ -154,6 +154,9 @@ This draws a 2px blue border inside the cell without affecting grid layout. The 
 
 ## Task 5: Add Expert difficulty
 
+- [x] Extend `Difficulty` type in `sudoku.ts` with `"expert"` and add `expert: 58` to `removals`
+- [x] Add `"expert"` to the difficulty array in `App.tsx`
+
 **Problem:** The hardest level is "Hard" (53 cells removed, 28 given). Expert removes 58 cells (23 given), closer to the theoretical minimum of 17.
 
 **Approach:** Add `"expert"` to the `Difficulty` union type in `sudoku.ts`, add its removal count to the `removals` map, and add an "Expert" button in `App.tsx`.
