@@ -297,7 +297,7 @@ Test cases in `describe("fillAllCandidateNotes", ...)`:
 ### Task N:
 - [x] Run `npm run check` — no lint/format errors
 - [x] Run `npm run test` — all tests pass
-- [ ] Run `npm run dev` — manual check:
+- [x] Run `npm run dev` — manual check:
   - Place the 9th of a digit → board cells with that digit should dim
   - Fill all 9 cells in a row/col/box → green flash animation plays
   - Selected cell has visible blue border ring
