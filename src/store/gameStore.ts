@@ -318,7 +318,7 @@ export function fillCandidateNotes() {
     const existing = gameData.value.notes[sel.row][sel.col]
     const unchanged =
         existing.length === candidates.length &&
-        candidates.every((n, i) => n === existing[i])
+        candidates.every((n) => existing.includes(n))
     if (unchanged) return
     gameData.value.notes[sel.row][sel.col] = candidates
     gameData.saveHistory()
@@ -336,8 +336,14 @@ export function fillAllCandidateNotes() {
                 if (isValidPlacement(gameData.value.board, r, c, n))
                     candidates.push(n)
             }
-            gameData.value.notes[r][c] = candidates
-            changed = true
+            const existing = gameData.value.notes[r][c]
+            const unchanged =
+                existing.length === candidates.length &&
+                candidates.every((n) => existing.includes(n))
+            if (!unchanged) {
+                gameData.value.notes[r][c] = candidates
+                changed = true
+            }
         }
     }
     if (changed) gameData.saveHistory()

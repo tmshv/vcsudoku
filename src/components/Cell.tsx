@@ -31,7 +31,8 @@ export function Cell({
     if (isSelected) className += " cell-selected"
     else if (isSameNumber) className += " cell-same-number"
     else if (isHighlighted) className += " cell-highlighted"
-    if (isDigitComplete && !isInitial && !isSelected) className += " cell-digit-complete"
+    if (isDigitComplete && !isInitial && !isSelected)
+        className += " cell-digit-complete"
     if (isLineComplete) className += " cell-line-complete"
     if (isError) className += " cell-error"
     if (isInitial) className += " cell-initial"
