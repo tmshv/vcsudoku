@@ -191,6 +191,11 @@ Note: `store/gameStore.ts` imports `Difficulty` from `../sudoku`, so no changes 
 
 ## Task 6: `w` / `Shift+W` — fill cell(s) with candidate notes
 
+- [x] Add `fillCandidateNotes()` and `fillAllCandidateNotes()` to `store/gameStore.ts`
+- [x] Handle `w` and `W` keys in `useKeyboard.ts`
+- [x] Add `{ key: "W", action: "candidates" }` hint to `StatusBar.tsx`
+- [x] Write tests in `store/gameStore.test.ts`
+
 **Feature:** `w` fills the selected cell's notes with all valid candidates (digits not already present in the cell's row, column, or box). `Shift+W` does the same for every empty non-initial cell on the board. Both save a single undo history entry.
 
 ### Logic
@@ -290,8 +295,8 @@ Test cases in `describe("fillAllCandidateNotes", ...)`:
 
 ```
 ### Task N:
-- [ ] Run `npm run check` — no lint/format errors
-- [ ] Run `npm run test` — all tests pass
+- [x] Run `npm run check` — no lint/format errors
+- [x] Run `npm run test` — all tests pass
 - [ ] Run `npm run dev` — manual check:
   - Place the 9th of a digit → board cells with that digit should dim
   - Fill all 9 cells in a row/col/box → green flash animation plays
