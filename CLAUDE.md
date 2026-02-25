@@ -23,22 +23,22 @@ This is a browser-based Sudoku game. All source code is in `src/`.
 
 ### Store layer
 
-- **`store/gameStore.ts`** — Two Valtio proxies: `gameData` (proxyWithHistory wrapping board + notes, enables undo/redo) and `gameUI` (plain proxy for solution, initial, selected, difficulty, elapsed, notesMode). All game mutations and derived computations (`computeErrors`, `computeWon`) live here.
+- **`store/gameStore.ts`** — Two Valtio proxies: `gameData` (proxyWithHistory wrapping board + notes, enables undo/redo) and `gameUI` (plain proxy for solution, initial, selected, difficulty, elapsed, notesMode). All game mutations and derived computations (`computeErrors`, `computeWon`) live here. Also exports `fillCandidateNotes` (fills selected cell's notes with valid candidates) and `fillAllCandidateNotes` (fills all empty non-initial cells); both guard against the won state and save a single undo history entry.
 - **`store/jumpStore.ts`** — Jump mode state machine (Valtio proxy). Space activates, two digits (row, col) jump to a cell, Escape cancels. Provides `getOverlay` for cell coordinate labels.
 
 ### Hooks
 
 - **`useGame.ts`** — Thin facade over the store. Subscribes to both proxies via `useSnapshot`, derives `errors` and `won` with `useMemo`, manages the timer interval, and re-exports store actions.
-- **`useKeyboard.ts`** — Centralized `keydown` handler: undo/redo (Ctrl+Z / Ctrl+Shift+Z / Ctrl+Y), digit placement, arrow keys, vim h/j/k/l movement, Shift+Arrow / H/J/K/L block-level jumps, N notes toggle, Space jump mode. Delegates to `jumpStore.handleKey` first.
+- **`useKeyboard.ts`** — Centralized `keydown` handler: undo/redo (Ctrl+Z / Ctrl+Shift+Z / Ctrl+Y), digit placement, arrow keys, vim h/j/k/l movement, Shift+Arrow / H/J/K/L block-level jumps, N notes toggle, Space jump mode, w/W candidate note fill. Delegates to `jumpStore.handleKey` first.
 
 ### Pure logic
 
-- **`sudoku.ts`** — Board validation (`isValidPlacement`), backtracking solver (`solve`), puzzle generation (`generatePuzzle`) with difficulty-based cell removal counts (easy=38, medium=46, hard=53 cells removed).
+- **`sudoku.ts`** — Board validation (`isValidPlacement`), backtracking solver (`solve`), puzzle generation (`generatePuzzle`) with difficulty-based cell removal counts (easy=38, medium=46, hard=53, expert=58 cells removed).
 
 ### Components
 
 - **`App.tsx`** — Root component. Composes the toolbar (difficulty buttons, timer), Board, NumberPad, StatusBar, and win overlay.
-- **`components/Board.tsx`** — Renders 9x9 grid, computes per-cell visual states (selected, highlighted row/col/box, same-number highlighting, errors). Accepts an `overlay` render prop for jump mode labels.
+- **`components/Board.tsx`** — Renders 9x9 grid, computes per-cell visual states (selected, highlighted row/col/box, same-number highlighting, errors, digit-complete dimming, line-complete animation). Accepts an `overlay` render prop for jump mode labels.
 - **`components/Cell.tsx`** — Renders a single cell: value, notes (3x3 grid of candidate digits), overlay label, or empty.
 - **`components/NumberPad.tsx`** — Number buttons 1-9 (disabled when all 9 instances placed), Notes toggle, Erase button, Undo/Redo buttons.
 - **`components/StatusBar.tsx`** — Contextual shortcut hints. Shows jump mode prompts when active, default navigation shortcuts otherwise.

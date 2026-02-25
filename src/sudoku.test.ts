@@ -235,6 +235,12 @@ describe("generatePuzzle", () => {
         expect(filled).toBeGreaterThanOrEqual(81 - 53)
     })
 
+    it("expert: puzzle has at least 23 filled cells", () => {
+        const { puzzle } = generatePuzzle("expert")
+        const filled = puzzle.flat().filter((v) => v !== 0).length
+        expect(filled).toBeGreaterThanOrEqual(81 - 58)
+    })
+
     it("solution is a valid complete board", () => {
         const { solution } = generatePuzzle("easy")
         expect(isValidBoard(solution)).toBe(true)

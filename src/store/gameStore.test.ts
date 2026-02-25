@@ -569,6 +569,22 @@ describe("fillCandidateNotes", () => {
         undo()
         expect(gameData.value.notes[0][0]).toEqual([])
     })
+
+    it("no-ops when game is won", () => {
+        selectCell({ row: 0, col: 0 })
+        placeNumber(5)
+        selectCell({ row: 0, col: 1 })
+        placeNumber(3)
+        selectCell({ row: 4, col: 4 })
+        placeNumber(5)
+        selectCell({ row: 8, col: 8 })
+        placeNumber(9)
+        expect(computeWon(gameData.value.board, gameUI.solution)).toBe(true)
+        const historyIndexBefore = gameData.history.index
+        selectCell({ row: 0, col: 0 })
+        fillCandidateNotes()
+        expect(gameData.history.index).toBe(historyIndexBefore)
+    })
 })
 
 describe("fillAllCandidateNotes", () => {
@@ -605,5 +621,20 @@ describe("fillAllCandidateNotes", () => {
         expect(gameData.value.notes[0][1]).toEqual([])
         expect(gameData.value.notes[4][4]).toEqual([])
         expect(gameData.value.notes[8][8]).toEqual([])
+    })
+
+    it("no-ops when game is won", () => {
+        selectCell({ row: 0, col: 0 })
+        placeNumber(5)
+        selectCell({ row: 0, col: 1 })
+        placeNumber(3)
+        selectCell({ row: 4, col: 4 })
+        placeNumber(5)
+        selectCell({ row: 8, col: 8 })
+        placeNumber(9)
+        expect(computeWon(gameData.value.board, gameUI.solution)).toBe(true)
+        const historyIndexBefore = gameData.history.index
+        fillAllCandidateNotes()
+        expect(gameData.history.index).toBe(historyIndexBefore)
     })
 })

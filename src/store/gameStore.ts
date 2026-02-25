@@ -304,6 +304,7 @@ export function redo() {
 }
 
 export function fillCandidateNotes() {
+    if (computeWon(gameData.value.board, gameUI.solution)) return
     const sel = gameUI.selected
     if (!sel) return
     if (gameUI.initial[sel.row][sel.col]) return
@@ -319,6 +320,8 @@ export function fillCandidateNotes() {
 }
 
 export function fillAllCandidateNotes() {
+    if (computeWon(gameData.value.board, gameUI.solution)) return
+    let changed = false
     for (let r = 0; r < 9; r++) {
         for (let c = 0; c < 9; c++) {
             if (gameUI.initial[r][c]) continue
@@ -329,7 +332,8 @@ export function fillAllCandidateNotes() {
                     candidates.push(n)
             }
             gameData.value.notes[r][c] = candidates
+            changed = true
         }
     }
-    gameData.saveHistory()
+    if (changed) gameData.saveHistory()
 }

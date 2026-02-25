@@ -88,7 +88,9 @@ export function Board({
                             isHighlighted={isHighlighted}
                             isSameNumber={isSameNumber}
                             isError={isError}
-                            isDigitComplete={completedDigits.has(value)}
+                            isDigitComplete={
+                                value !== 0 && completedDigits.has(value)
+                            }
                             isLineComplete={isLineComplete}
                             notes={notes[r][c]}
                             overlay={overlay?.(r, c)}
