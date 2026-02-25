@@ -315,6 +315,11 @@ export function fillCandidateNotes() {
         if (isValidPlacement(gameData.value.board, sel.row, sel.col, n))
             candidates.push(n)
     }
+    const existing = gameData.value.notes[sel.row][sel.col]
+    const unchanged =
+        existing.length === candidates.length &&
+        candidates.every((n, i) => n === existing[i])
+    if (unchanged) return
     gameData.value.notes[sel.row][sel.col] = candidates
     gameData.saveHistory()
 }
