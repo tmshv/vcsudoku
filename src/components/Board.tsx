@@ -12,6 +12,7 @@ interface BoardProps {
     selected: CellPos | null
     errors: Set<string>
     notes: readonly (readonly number[])[][]
+    won: boolean
     onSelectCell: (pos: CellPos) => void
     overlay?: (row: number, col: number) => CellOverlay | null
 }
@@ -22,6 +23,7 @@ export function Board({
     selected,
     errors,
     notes,
+    won,
     onSelectCell,
     overlay,
 }: BoardProps) {
@@ -29,9 +31,12 @@ export function Board({
 
     const completedDigits = new Set<number>()
     const digitCounts = new Map<number, number>()
-    for (const row of board)
-        for (const v of row)
-            if (v !== 0) digitCounts.set(v, (digitCounts.get(v) ?? 0) + 1)
+    for (let r = 0; r < 9; r++)
+        for (let c = 0; c < 9; c++) {
+            const v = board[r][c]
+            if (v !== 0 && !errors.has(`${r},${c}`))
+                digitCounts.set(v, (digitCounts.get(v) ?? 0) + 1)
+        }
     for (const [digit, count] of digitCounts)
         if (count >= 9) completedDigits.add(digit)
 
@@ -78,11 +83,12 @@ export function Board({
                         value === selectedValue
                     const isError = errors.has(`${r},${c}`)
                     const isLineComplete =
-                        completedRows.has(r) ||
-                        completedCols.has(c) ||
-                        completedBoxes.has(
-                            Math.floor(r / 3) * 3 + Math.floor(c / 3),
-                        )
+                        !won &&
+                        (completedRows.has(r) ||
+                            completedCols.has(c) ||
+                            completedBoxes.has(
+                                Math.floor(r / 3) * 3 + Math.floor(c / 3),
+                            ))
 
                     return (
                         <Cell

@@ -44,6 +44,7 @@ function App() {
                 selected={game.selected}
                 errors={game.errors}
                 notes={game.notes}
+                won={game.won}
                 onSelectCell={game.selectCell}
                 overlay={jump.active ? getOverlay : undefined}
             />
