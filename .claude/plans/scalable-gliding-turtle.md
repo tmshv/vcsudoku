@@ -130,6 +130,8 @@ The `::after` is created when the class is added (completing a line) and destroy
 
 ## Task 4: Improve selected-cell cursor contrast
 
+- [x] Add `box-shadow: inset 0 0 0 2px var(--color-primary)` to `.cell-selected` in `index.css`
+
 **Problem:** `--color-selected: #bbdefb` is too close in lightness to `--color-highlighted` and `--color-same-number`, making the cursor hard to spot.
 
 **Approach:** Add a strong inset border to `.cell-selected` using `box-shadow` (no layout impact). Keep the existing light-blue background as a secondary cue.
