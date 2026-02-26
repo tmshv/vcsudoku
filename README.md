@@ -18,6 +18,7 @@ A fully playable browser-based Sudoku with three difficulty levels, pencil notes
 - **Jump mode** — Press Space, then two digits (row, col) to teleport to any cell
 - **Status bar** — Contextual shortcut hints so you don't have to memorize everything
 - **Win detection** — Fill it all in correctly and get a satisfying overlay
+- **Completion animations** — Blue flash on cells when a row, column, or box is completed; matching blue flash on the number pad button when all 9 of a digit are placed
 
 ## Tech Stack
 

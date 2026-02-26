@@ -47,6 +47,10 @@ This is a browser-based Sudoku game. All source code is in `src/`.
 
 - **`index.css`** — All styles in a single file.
 
+## Documentation
+
+- Always add new user-facing features and behaviour changes to `README.md`.
+
 ## Style
 
 - Markdown tables must have columns aligned with spaces so that pipe characters form straight vertical lines.
