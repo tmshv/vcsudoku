@@ -65,15 +65,15 @@ Explanation examples:
 - [x] Add `.hint-btn` CSS to `src/index.css`: amber/yellow tint (e.g. `color: #f57f17; border-color: #f9a825`) similar in size/shape to `.notes-btn`
 
 ### Task 8: Tests — pure hint logic
-- [ ] Create `src/hint.test.ts`
-- [ ] Test `getCandidates`: returns valid numbers for a cell (verify using a known board)
-- [ ] Test `findNakedSingle`: returns correct cell+value when exactly one candidate exists; returns null when no naked singles
-- [ ] Test `findHiddenSingleInRow`: returns correct cell+value for a digit with one valid row cell; returns null when none
-- [ ] Test `findHiddenSingleInColumn`: same for column
-- [ ] Test `findHiddenSingleInBox`: same for 3×3 box
-- [ ] Test `getHint` fallback: returns a hint from solution when no logical strategy applies
-- [ ] Test `getHint` returns null on fully solved board
-- [ ] Use the standard deterministic board from other tests (SOLUTION from `vi.hoisted`)
+- [x] Create `src/hint.test.ts`
+- [x] Test `getCandidates`: returns valid numbers for a cell (verify using a known board)
+- [x] Test `findNakedSingle`: returns correct cell+value when exactly one candidate exists; returns null when no naked singles
+- [x] Test `findHiddenSingleInRow`: returns correct cell+value for a digit with one valid row cell; returns null when none
+- [x] Test `findHiddenSingleInColumn`: same for column
+- [x] Test `findHiddenSingleInBox`: same for 3×3 box
+- [x] Test `getHint` fallback: returns a hint from solution when no logical strategy applies
+- [x] Test `getHint` returns null on fully solved board
+- [x] Use the standard deterministic board from other tests (SOLUTION from `vi.hoisted`)
 
 ### Task 9: Tests — hint store
 - [ ] Create `src/store/hintStore.test.ts` (with same `vi.hoisted` + `vi.mock("../sudoku")` boilerplate)
