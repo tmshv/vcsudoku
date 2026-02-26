@@ -1,4 +1,5 @@
 import { useEffect } from "react"
+import { boardToAscii } from "./export"
 import { handleKey as findHandleKey } from "./store/findStore"
 import {
     clearCell,
@@ -103,6 +104,14 @@ export function useKeyboard() {
                 fillAllCandidateNotes()
             } else if (e.key === "v") {
                 showHint()
+            } else if (e.key === "p") {
+                navigator.clipboard.writeText(
+                    boardToAscii(gameData.value.board),
+                )
+                gameUI.copied = true
+                setTimeout(() => {
+                    gameUI.copied = false
+                }, 2000)
             } else if (e.key === "Escape") {
                 dismissHint()
             }

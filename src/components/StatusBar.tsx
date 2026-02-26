@@ -27,6 +27,14 @@ function useStatusHint(): StatusHint | null {
             uiSnap.selected as CellPos | null,
         ) !== null
 
+    if (uiSnap.copied) {
+        return {
+            label: "COPIED",
+            text: "Board copied to clipboard",
+            shortcuts: [],
+        }
+    }
+
     if (find.active) {
         return {
             label: "FIND",
@@ -69,6 +77,7 @@ function useStatusHint(): StatusHint | null {
         { key: "Space", action: "jump" },
         { key: "F", action: "find" },
         { key: "w / W", action: "candidates" },
+        { key: "p", action: "copy" },
     ]
     if (hasLastOne) {
         shortcuts.push({ key: "X", action: "last one" })
