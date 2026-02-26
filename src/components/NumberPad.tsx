@@ -1,3 +1,5 @@
+import { useEffect, useRef, useState } from "react"
+
 interface NumberPadProps {
     onNumber: (n: number) => void
     onClear: () => void
@@ -8,6 +10,20 @@ interface NumberPadProps {
     notesMode: boolean
     onToggleNotesMode: () => void
     board: number[][]
+    errors: Set<string>
+}
+
+function computeFull(board: number[][], errors: Set<string>): Set<number> {
+    const counts = new Map<number, number>()
+    for (let r = 0; r < board.length; r++)
+        for (let c = 0; c < board[r].length; c++) {
+            const v = board[r][c]
+            if (v !== 0 && !errors.has(`${r},${c}`))
+                counts.set(v, (counts.get(v) ?? 0) + 1)
+        }
+    const full = new Set<number>()
+    for (const [n, count] of counts) if (count >= 9) full.add(n)
+    return full
 }
 
 export function NumberPad({
@@ -20,13 +36,76 @@ export function NumberPad({
     notesMode,
     onToggleNotesMode,
     board,
+    errors,
 }: NumberPadProps) {
     const counts = new Map<number, number>()
-    for (const row of board) {
-        for (const v of row) {
-            if (v !== 0) counts.set(v, (counts.get(v) ?? 0) + 1)
+    for (let r = 0; r < board.length; r++) {
+        for (let c = 0; c < board[r].length; c++) {
+            const v = board[r][c]
+            if (v !== 0 && !errors.has(`${r},${c}`))
+                counts.set(v, (counts.get(v) ?? 0) + 1)
         }
     }
+
+    // prevFull tracks digits that were complete on the previous effect run.
+    // isFirstRun lets us seed prevFull from the initial board without triggering
+    // a flash for pre-filled digits that happen to total 9 on mount.
+    const prevFull = useRef(new Set<number>())
+    const isFirstRun = useRef(true)
+
+    const [flashDigits, setFlashDigits] = useState(
+        () => new Map<number, number>(),
+    )
+    const flashTimersRef = useRef<ReturnType<typeof setTimeout>[]>([])
+
+    // Cancel all pending timers on unmount.
+    useEffect(() => {
+        return () => {
+            for (const t of flashTimersRef.current) clearTimeout(t)
+        }
+    }, [])
+
+    useEffect(() => {
+        const currentFull = computeFull(board, errors)
+
+        // On first run, seed prevFull from the initial board state so that
+        // pre-filled complete digits never animate.
+        if (isFirstRun.current) {
+            isFirstRun.current = false
+            prevFull.current = currentFull
+            return
+        }
+
+        const newlyComplete = [...currentFull].filter(
+            (n) => !prevFull.current.has(n),
+        )
+        prevFull.current = currentFull
+
+        if (newlyComplete.length === 0) return
+
+        setFlashDigits((prev) => {
+            const next = new Map(prev)
+            for (const n of newlyComplete) next.set(n, (next.get(n) ?? 0) + 1)
+            return next
+        })
+
+        const timer = setTimeout(() => {
+            setFlashDigits((prev) => {
+                const next = new Map(prev)
+                for (const n of newlyComplete) {
+                    const count = next.get(n) ?? 0
+                    if (count <= 1) next.delete(n)
+                    else next.set(n, count - 1)
+                }
+                return next
+            })
+            flashTimersRef.current = flashTimersRef.current.filter(
+                (t) => t !== timer,
+            )
+        }, 1400)
+
+        flashTimersRef.current.push(timer)
+    }, [board, errors])
 
     return (
         <div className="number-pad">
@@ -36,7 +115,7 @@ export function NumberPad({
                     <button
                         type="button"
                         key={n}
-                        className="num-btn"
+                        className={`num-btn${full ? " num-btn-complete" : ""}${flashDigits.has(n) ? " num-btn-flash" : ""}`}
                         disabled={full}
                         onClick={() => onNumber(n)}
                     >

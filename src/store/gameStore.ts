@@ -1,6 +1,11 @@
 import { proxy } from "valtio"
 import { proxyWithHistory } from "valtio-history"
-import { type Board, type Difficulty, generatePuzzle } from "../sudoku"
+import {
+    type Board,
+    type Difficulty,
+    generatePuzzle,
+    isValidPlacement,
+} from "../sudoku"
 
 export interface CellPos {
     row: number
@@ -296,4 +301,50 @@ export function undo() {
 
 export function redo() {
     gameData.redo()
+}
+
+export function fillCandidateNotes() {
+    if (computeWon(gameData.value.board, gameUI.solution)) return
+    const sel = gameUI.selected
+    if (!sel) return
+    if (gameUI.initial[sel.row][sel.col]) return
+    if (gameData.value.board[sel.row][sel.col] !== 0) return
+
+    const candidates: number[] = []
+    for (let n = 1; n <= 9; n++) {
+        if (isValidPlacement(gameData.value.board, sel.row, sel.col, n))
+            candidates.push(n)
+    }
+    const existing = gameData.value.notes[sel.row][sel.col]
+    const unchanged =
+        existing.length === candidates.length &&
+        candidates.every((n) => existing.includes(n))
+    if (unchanged) return
+    gameData.value.notes[sel.row][sel.col] = candidates
+    gameData.saveHistory()
+}
+
+export function fillAllCandidateNotes() {
+    if (computeWon(gameData.value.board, gameUI.solution)) return
+    let changed = false
+    for (let r = 0; r < 9; r++) {
+        for (let c = 0; c < 9; c++) {
+            if (gameUI.initial[r][c]) continue
+            if (gameData.value.board[r][c] !== 0) continue
+            const candidates: number[] = []
+            for (let n = 1; n <= 9; n++) {
+                if (isValidPlacement(gameData.value.board, r, c, n))
+                    candidates.push(n)
+            }
+            const existing = gameData.value.notes[r][c]
+            const unchanged =
+                existing.length === candidates.length &&
+                candidates.every((n) => existing.includes(n))
+            if (!unchanged) {
+                gameData.value.notes[r][c] = candidates
+                changed = true
+            }
+        }
+    }
+    if (changed) gameData.saveHistory()
 }

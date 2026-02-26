@@ -2,6 +2,8 @@ import { useEffect } from "react"
 import { handleKey as findHandleKey } from "./store/findStore"
 import {
     clearCell,
+    fillAllCandidateNotes,
+    fillCandidateNotes,
     fillLastDigit,
     findLastOneCell,
     gameData,
@@ -94,6 +96,10 @@ export function useKeyboard() {
                 if (findLastOneCell(gameData.value.board, gameUI.selected)) {
                     fillLastDigit()
                 }
+            } else if (e.key === "w") {
+                fillCandidateNotes()
+            } else if (e.key === "W") {
+                fillAllCandidateNotes()
             }
         }
         window.addEventListener("keydown", handleKey)

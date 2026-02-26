@@ -1,5 +1,5 @@
 export type Board = number[][]
-export type Difficulty = "easy" | "medium" | "hard"
+export type Difficulty = "easy" | "medium" | "hard" | "expert"
 
 export function isValidPlacement(
     board: Board,
@@ -122,6 +122,7 @@ export function generatePuzzle(difficulty: Difficulty): {
         easy: 38,
         medium: 46,
         hard: 53,
+        expert: 58,
     }
 
     const positions = shuffle(

@@ -39,6 +39,8 @@ import {
     clearCell,
     computeErrors,
     computeWon,
+    fillAllCandidateNotes,
+    fillCandidateNotes,
     fillLastDigit,
     findLastOneCell,
     gameData,
@@ -511,5 +513,145 @@ describe("fillLastDigit", () => {
         expect(gameData.value.board[4][4]).toBe(5)
         undo()
         expect(gameData.value.board[4][4]).toBe(0)
+    })
+})
+
+describe("fillCandidateNotes", () => {
+    it("fills correct candidates for selected empty cell", () => {
+        // [0][0] solution=5: only 5 is valid (row has 1,2,4,6,7,8,9; col 0 has 1,2,3,4,6,7,8,9)
+        selectCell({ row: 0, col: 0 })
+        fillCandidateNotes()
+        expect(gameData.value.notes[0][0]).toEqual([5])
+    })
+
+    it("fills correct candidates for another empty cell", () => {
+        // [0][1] solution=3: only 3 is valid
+        selectCell({ row: 0, col: 1 })
+        fillCandidateNotes()
+        expect(gameData.value.notes[0][1]).toEqual([3])
+    })
+
+    it("replaces existing notes in the cell", () => {
+        selectCell({ row: 0, col: 0 })
+        toggleNote(1)
+        toggleNote(2)
+        expect(gameData.value.notes[0][0]).toContain(1)
+        fillCandidateNotes()
+        expect(gameData.value.notes[0][0]).toEqual([5])
+    })
+
+    it("skips initial (given) cells", () => {
+        // [0][2] is an initial cell (value=4)
+        selectCell({ row: 0, col: 2 })
+        fillCandidateNotes()
+        expect(gameData.value.notes[0][2]).toEqual([])
+    })
+
+    it("skips cells that already have a placed value", () => {
+        selectCell({ row: 0, col: 0 })
+        placeNumber(5)
+        fillCandidateNotes()
+        expect(gameData.value.notes[0][0]).toEqual([])
+    })
+
+    it("no-ops when no cell is selected", () => {
+        const notesBefore = gameData.value.notes.map((r) =>
+            r.map((c) => [...c]),
+        )
+        fillCandidateNotes()
+        expect(gameData.value.notes).toEqual(notesBefore)
+    })
+
+    it("saves a single undo history entry", () => {
+        selectCell({ row: 0, col: 0 })
+        fillCandidateNotes()
+        expect(gameData.value.notes[0][0]).toEqual([5])
+        undo()
+        expect(gameData.value.notes[0][0]).toEqual([])
+    })
+
+    it("no-ops when notes already match candidates — does not add undo entry", () => {
+        selectCell({ row: 0, col: 0 })
+        fillCandidateNotes()
+        expect(gameData.value.notes[0][0]).toEqual([5])
+        const historyIndexAfterFirst = gameData.history.index
+        fillCandidateNotes()
+        expect(gameData.history.index).toBe(historyIndexAfterFirst)
+        expect(gameData.value.notes[0][0]).toEqual([5])
+    })
+
+    it("no-ops when game is won", () => {
+        selectCell({ row: 0, col: 0 })
+        placeNumber(5)
+        selectCell({ row: 0, col: 1 })
+        placeNumber(3)
+        selectCell({ row: 4, col: 4 })
+        placeNumber(5)
+        selectCell({ row: 8, col: 8 })
+        placeNumber(9)
+        expect(computeWon(gameData.value.board, gameUI.solution)).toBe(true)
+        const historyIndexBefore = gameData.history.index
+        selectCell({ row: 0, col: 0 })
+        fillCandidateNotes()
+        expect(gameData.history.index).toBe(historyIndexBefore)
+    })
+})
+
+describe("fillAllCandidateNotes", () => {
+    it("fills all 4 empty cells with correct candidates", () => {
+        fillAllCandidateNotes()
+        expect(gameData.value.notes[0][0]).toEqual([5])
+        expect(gameData.value.notes[0][1]).toEqual([3])
+        expect(gameData.value.notes[4][4]).toEqual([5])
+        expect(gameData.value.notes[8][8]).toEqual([9])
+    })
+
+    it("does not touch initial cells", () => {
+        fillAllCandidateNotes()
+        // [0][2] is initial (value=4), notes must remain empty
+        expect(gameData.value.notes[0][2]).toEqual([])
+    })
+
+    it("does not touch cells with placed values", () => {
+        selectCell({ row: 0, col: 0 })
+        placeNumber(5)
+        fillAllCandidateNotes()
+        // [0][0] now has a value; notes must remain empty
+        expect(gameData.value.notes[0][0]).toEqual([])
+    })
+
+    it("saves as single undo entry — one undo restores all notes", () => {
+        fillAllCandidateNotes()
+        expect(gameData.value.notes[0][0]).toEqual([5])
+        expect(gameData.value.notes[0][1]).toEqual([3])
+        expect(gameData.value.notes[4][4]).toEqual([5])
+        expect(gameData.value.notes[8][8]).toEqual([9])
+        undo()
+        expect(gameData.value.notes[0][0]).toEqual([])
+        expect(gameData.value.notes[0][1]).toEqual([])
+        expect(gameData.value.notes[4][4]).toEqual([])
+        expect(gameData.value.notes[8][8]).toEqual([])
+    })
+
+    it("no-ops when all notes already match candidates — does not add undo entry", () => {
+        fillAllCandidateNotes()
+        const historyIndexAfterFirst = gameData.history.index
+        fillAllCandidateNotes()
+        expect(gameData.history.index).toBe(historyIndexAfterFirst)
+    })
+
+    it("no-ops when game is won", () => {
+        selectCell({ row: 0, col: 0 })
+        placeNumber(5)
+        selectCell({ row: 0, col: 1 })
+        placeNumber(3)
+        selectCell({ row: 4, col: 4 })
+        placeNumber(5)
+        selectCell({ row: 8, col: 8 })
+        placeNumber(9)
+        expect(computeWon(gameData.value.board, gameUI.solution)).toBe(true)
+        const historyIndexBefore = gameData.history.index
+        fillAllCandidateNotes()
+        expect(gameData.history.index).toBe(historyIndexBefore)
     })
 })

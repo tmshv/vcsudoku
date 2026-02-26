@@ -22,16 +22,18 @@ function App() {
 
             <div className="toolbar">
                 <div className="difficulty-group">
-                    {(["easy", "medium", "hard"] as Difficulty[]).map((d) => (
-                        <button
-                            type="button"
-                            key={d}
-                            className={`diff-btn ${game.difficulty === d ? "diff-active" : ""}`}
-                            onClick={() => game.newGame(d)}
-                        >
-                            {d.charAt(0).toUpperCase() + d.slice(1)}
-                        </button>
-                    ))}
+                    {(["easy", "medium", "hard", "expert"] as Difficulty[]).map(
+                        (d) => (
+                            <button
+                                type="button"
+                                key={d}
+                                className={`diff-btn ${game.difficulty === d ? "diff-active" : ""}`}
+                                onClick={() => game.newGame(d)}
+                            >
+                                {d.charAt(0).toUpperCase() + d.slice(1)}
+                            </button>
+                        ),
+                    )}
                 </div>
                 <div className="timer">{formatTime(game.elapsed)}</div>
             </div>
@@ -58,6 +60,7 @@ function App() {
                 notesMode={game.notesMode}
                 onToggleNotesMode={game.toggleNotesMode}
                 board={game.board}
+                errors={game.errors}
             />
 
             <StatusBar />
