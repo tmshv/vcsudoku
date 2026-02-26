@@ -108,6 +108,10 @@ export function useKeyboard() {
                 navigator.clipboard.writeText(
                     boardToAscii(gameData.value.board),
                 )
+                gameUI.copied = true
+                setTimeout(() => {
+                    gameUI.copied = false
+                }, 2000)
             } else if (e.key === "Escape") {
                 dismissHint()
             }

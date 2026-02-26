@@ -27,6 +27,14 @@ function useStatusHint(): StatusHint | null {
             uiSnap.selected as CellPos | null,
         ) !== null
 
+    if (uiSnap.copied) {
+        return {
+            label: "COPIED",
+            text: "Board copied to clipboard",
+            shortcuts: [],
+        }
+    }
+
     if (find.active) {
         return {
             label: "FIND",
