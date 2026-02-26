@@ -62,7 +62,7 @@ Explanation examples:
 - [x] Pass `onHint={showHint}` and `won={game.won}` to `<NumberPad>`
 
 ### Task 7: Styles
-- [ ] Add `.hint-btn` CSS to `src/index.css`: amber/yellow tint (e.g. `color: #f57f17; border-color: #f9a825`) similar in size/shape to `.notes-btn`
+- [x] Add `.hint-btn` CSS to `src/index.css`: amber/yellow tint (e.g. `color: #f57f17; border-color: #f9a825`) similar in size/shape to `.notes-btn`
 
 ### Task 8: Tests — pure hint logic
 - [ ] Create `src/hint.test.ts`
