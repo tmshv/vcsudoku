@@ -69,6 +69,7 @@ function useStatusHint(): StatusHint | null {
         { key: "Space", action: "jump" },
         { key: "F", action: "find" },
         { key: "w / W", action: "candidates" },
+        { key: "p", action: "copy" },
     ]
     if (hasLastOne) {
         shortcuts.push({ key: "X", action: "last one" })
