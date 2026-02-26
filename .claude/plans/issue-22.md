@@ -76,16 +76,16 @@ Explanation examples:
 - [x] Use the standard deterministic board from other tests (SOLUTION from `vi.hoisted`)
 
 ### Task 9: Tests — hint store
-- [ ] Create `src/store/hintStore.test.ts` (with same `vi.hoisted` + `vi.mock("../sudoku")` boilerplate)
-- [ ] `beforeEach`: `newGame("easy")` + `dismissHint()`
-- [ ] Test `showHint()` sets `hintState.hint` to a non-null value
-- [ ] Test `showHint()` calls `selectCell()` to move selection to the hint cell
-- [ ] Test `showHint()` is a no-op when the game is won
-- [ ] Test `dismissHint()` clears `hintState.hint`
-- [ ] Test auto-dismiss: after `showHint()`, call `placeNumber()` then `await Promise.resolve()` — `hintState.hint` should be null (Valtio subscribe is microtask-based)
+- [x] Create `src/store/hintStore.test.ts` (with same `vi.hoisted` + `vi.mock("../sudoku")` boilerplate)
+- [x] `beforeEach`: `newGame("easy")` + `dismissHint()`
+- [x] Test `showHint()` sets `hintState.hint` to a non-null value
+- [x] Test `showHint()` calls `selectCell()` to move selection to the hint cell
+- [x] Test `showHint()` is a no-op when the game is won
+- [x] Test `dismissHint()` clears `hintState.hint`
+- [x] Test auto-dismiss: after `showHint()`, call `placeNumber()` then `await Promise.resolve()` — `hintState.hint` should be null (Valtio subscribe is microtask-based)
 
 ### Task 10: README
-- [ ] Add "Hint" to the keyboard shortcuts / features section in `README.md`
+- [x] Add "Hint" to the keyboard shortcuts / features section in `README.md`
 
 ---
 
