@@ -22,14 +22,14 @@ When a hint is active, the board selection moves to the hint cell, and the Statu
 ## Tasks
 
 ### Task 1: Pure hint logic
-- [ ] Create `src/hint.ts`
-- [ ] Export `interface Hint { cell: {row, col}; value: number; strategy: string; explanation: string }`
-- [ ] `getCandidates(board, row, col): number[]` — wraps `isValidPlacement`
-- [ ] `findNakedSingle(board)` — find first empty cell with exactly 1 candidate
-- [ ] `findHiddenSingleInRow(board)` — for each row, find digit that fits only one cell
-- [ ] `findHiddenSingleInColumn(board)` — same for columns
-- [ ] `findHiddenSingleInBox(board)` — same for 3×3 boxes
-- [ ] `getHint(board, solution): Hint | null` — try strategies in order; fallback to solution if all fail
+- [x] Create `src/hint.ts`
+- [x] Export `interface Hint { cell: {row, col}; value: number; strategy: string; explanation: string }`
+- [x] `getCandidates(board, row, col): number[]` — wraps `isValidPlacement`
+- [x] `findNakedSingle(board)` — find first empty cell with exactly 1 candidate
+- [x] `findHiddenSingleInRow(board)` — for each row, find digit that fits only one cell
+- [x] `findHiddenSingleInColumn(board)` — same for columns
+- [x] `findHiddenSingleInBox(board)` — same for 3×3 boxes
+- [x] `getHint(board, solution): Hint | null` — try strategies in order; fallback to solution if all fail
 
 Explanation examples:
 - Naked single: `"Only 7 fits here — its row, column, and box each already contain all other digits."`
