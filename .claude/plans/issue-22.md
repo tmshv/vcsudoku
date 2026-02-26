@@ -39,11 +39,11 @@ Explanation examples:
 - Fallback: `"Try placing 7 here."`
 
 ### Task 2: Hint store
-- [ ] Create `src/store/hintStore.ts`
-- [ ] `hintState = proxy<{ hint: Hint | null }>({ hint: null })`
-- [ ] `showHint()` — reads `gameData.value.board` and `gameUI.solution`, calls `getHint()`, sets `hintState.hint`; also calls `selectCell()` to move selection to hint cell; no-op if game is won
-- [ ] `dismissHint()` — sets `hintState.hint = null`
-- [ ] Auto-subscribe to `gameData` with Valtio `subscribe` to dismiss hint on any board change (avoids circular imports between `hintStore` and `gameStore`)
+- [x] Create `src/store/hintStore.ts`
+- [x] `hintState = proxy<{ hint: Hint | null }>({ hint: null })`
+- [x] `showHint()` — reads `gameData.value.board` and `gameUI.solution`, calls `getHint()`, sets `hintState.hint`; also calls `selectCell()` to move selection to hint cell; no-op if game is won
+- [x] `dismissHint()` — sets `hintState.hint = null`
+- [x] Auto-subscribe to `gameData` with Valtio `subscribe` to dismiss hint on any board change (avoids circular imports between `hintStore` and `gameStore`)
 
 ### Task 3: NumberPad button
 - [ ] Add `onHint: () => void` prop to `NumberPadProps` in `src/components/NumberPad.tsx`
