@@ -54,9 +54,9 @@ Explanation examples:
 - [x] In `src/useKeyboard.ts`, add `else if (e.key === "v")` → `showHint()`
 
 ### Task 5: StatusBar display
-- [ ] In `src/components/StatusBar.tsx`, read `hintState` via `useSnapshot`
-- [ ] When `hintState.hint !== null`, return `{ label: "HINT", text: hint.explanation, shortcuts: [{key: "v", action: "next hint"}, {key: "Esc", action: "dismiss"}] }`
-- [ ] Add `Escape` key handling in `useKeyboard.ts` (or `hintStore` subscribe) to dismiss hint on Escape (only when no other mode is active)
+- [x] In `src/components/StatusBar.tsx`, read `hintState` via `useSnapshot`
+- [x] When `hintState.hint !== null`, return `{ label: "HINT", text: hint.explanation, shortcuts: [{key: "v", action: "next hint"}, {key: "Esc", action: "dismiss"}] }`
+- [x] Add `Escape` key handling in `useKeyboard.ts` (or `hintStore` subscribe) to dismiss hint on Escape (only when no other mode is active)
 
 ### Task 6: App.tsx wiring
 - [ ] Pass `onHint={showHint}` and `won={game.won}` to `<NumberPad>`
