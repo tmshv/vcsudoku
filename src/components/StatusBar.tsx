@@ -6,6 +6,7 @@ import {
     gameData,
     gameUI,
 } from "../store/gameStore"
+import { hintState } from "../store/hintStore"
 import { jumpState } from "../store/jumpStore"
 
 export interface StatusHint {
@@ -17,6 +18,7 @@ export interface StatusHint {
 function useStatusHint(): StatusHint | null {
     const jump = useSnapshot(jumpState)
     const find = useSnapshot(findState)
+    const hint = useSnapshot(hintState)
     const dataSnap = useSnapshot(gameData)
     const uiSnap = useSnapshot(gameUI)
     const hasLastOne =
@@ -45,6 +47,17 @@ function useStatusHint(): StatusHint | null {
             label: "JUMP",
             text: `Row ${jump.firstDigit} \u2014 press column 1\u20139`,
             shortcuts: [{ key: "Esc", action: "cancel" }],
+        }
+    }
+
+    if (hint.hint !== null) {
+        return {
+            label: "HINT",
+            text: hint.hint.explanation,
+            shortcuts: [
+                { key: "v", action: "next hint" },
+                { key: "Esc", action: "dismiss" },
+            ],
         }
     }
 

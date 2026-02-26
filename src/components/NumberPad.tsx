@@ -5,12 +5,14 @@ interface NumberPadProps {
     onClear: () => void
     onUndo: () => void
     onRedo: () => void
+    onHint: () => void
     undoDisabled: boolean
     redoDisabled: boolean
     notesMode: boolean
     onToggleNotesMode: () => void
     board: number[][]
     errors: Set<string>
+    won: boolean
 }
 
 function computeFull(board: number[][], errors: Set<string>): Set<number> {
@@ -31,12 +33,14 @@ export function NumberPad({
     onClear,
     onUndo,
     onRedo,
+    onHint,
     undoDisabled,
     redoDisabled,
     notesMode,
     onToggleNotesMode,
     board,
     errors,
+    won,
 }: NumberPadProps) {
     const counts = new Map<number, number>()
     for (let r = 0; r < board.length; r++) {
@@ -152,6 +156,14 @@ export function NumberPad({
                 onClick={onClear}
             >
                 Erase
+            </button>
+            <button
+                type="button"
+                className="num-btn hint-btn"
+                disabled={won}
+                onClick={onHint}
+            >
+                Hint
             </button>
         </div>
     )

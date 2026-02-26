@@ -16,6 +16,7 @@ import {
     toggleNotesMode,
     undo,
 } from "./store/gameStore"
+import { dismissHint, showHint } from "./store/hintStore"
 import { handleKey as jumpHandleKey } from "./store/jumpStore"
 
 export function useKeyboard() {
@@ -100,6 +101,10 @@ export function useKeyboard() {
                 fillCandidateNotes()
             } else if (e.key === "W") {
                 fillAllCandidateNotes()
+            } else if (e.key === "v") {
+                showHint()
+            } else if (e.key === "Escape") {
+                dismissHint()
             }
         }
         window.addEventListener("keydown", handleKey)
