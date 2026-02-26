@@ -51,7 +51,7 @@ Explanation examples:
 - [x] Disable when game is won (add `won: boolean` prop)
 
 ### Task 4: Keyboard shortcut
-- [ ] In `src/useKeyboard.ts`, add `else if (e.key === "v")` → `showHint()`
+- [x] In `src/useKeyboard.ts`, add `else if (e.key === "v")` → `showHint()`
 
 ### Task 5: StatusBar display
 - [ ] In `src/components/StatusBar.tsx`, read `hintState` via `useSnapshot`
