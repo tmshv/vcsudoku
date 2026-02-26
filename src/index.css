@@ -152,10 +152,10 @@ h1 {
 
 @keyframes line-complete-flash {
     0% {
-        background: rgba(76, 175, 80, 0.45);
+        background: rgba(33, 150, 243, 0.45);
     }
     100% {
-        background: rgba(76, 175, 80, 0);
+        background: rgba(33, 150, 243, 0);
     }
 }
 
@@ -224,6 +224,7 @@ h1 {
 }
 
 .num-btn {
+    position: relative;
     width: calc(var(--cell-size) * 0.85);
     height: calc(var(--cell-size) * 0.85);
     border: 1px solid #ccc;
@@ -245,6 +246,31 @@ h1 {
     opacity: 0.3;
     cursor: default;
     pointer-events: none;
+}
+
+.num-btn-complete {
+    background: color-mix(in srgb, var(--color-primary) 15%, white);
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    font-weight: 700;
+}
+
+@keyframes digit-complete-flash {
+    0% {
+        background: rgba(33, 150, 243, 0.45);
+    }
+    100% {
+        background: rgba(33, 150, 243, 0);
+    }
+}
+
+.num-btn-flash::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    animation: digit-complete-flash 1.4s ease-out;
 }
 
 .notes-btn {
