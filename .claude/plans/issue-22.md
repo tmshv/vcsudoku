@@ -46,9 +46,9 @@ Explanation examples:
 - [x] Auto-subscribe to `gameData` with Valtio `subscribe` to dismiss hint on any board change (avoids circular imports between `hintStore` and `gameStore`)
 
 ### Task 3: NumberPad button
-- [ ] Add `onHint: () => void` prop to `NumberPadProps` in `src/components/NumberPad.tsx`
-- [ ] Add "Hint" button in NumberPad (styled with `.hint-btn` — amber tint to stand out)
-- [ ] Disable when game is won (add `won: boolean` prop)
+- [x] Add `onHint: () => void` prop to `NumberPadProps` in `src/components/NumberPad.tsx`
+- [x] Add "Hint" button in NumberPad (styled with `.hint-btn` — amber tint to stand out)
+- [x] Disable when game is won (add `won: boolean` prop)
 
 ### Task 4: Keyboard shortcut
 - [ ] In `src/useKeyboard.ts`, add `else if (e.key === "v")` → `showHint()`

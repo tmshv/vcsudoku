@@ -55,12 +55,14 @@ function App() {
                 onClear={game.clearCell}
                 onUndo={game.undo}
                 onRedo={game.redo}
+                onHint={() => {}}
                 undoDisabled={!game.canUndo}
                 redoDisabled={!game.canRedo}
                 notesMode={game.notesMode}
                 onToggleNotesMode={game.toggleNotesMode}
                 board={game.board}
                 errors={game.errors}
+                won={game.won}
             />
 
             <StatusBar />
