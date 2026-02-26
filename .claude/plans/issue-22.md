@@ -59,7 +59,7 @@ Explanation examples:
 - [x] Add `Escape` key handling in `useKeyboard.ts` (or `hintStore` subscribe) to dismiss hint on Escape (only when no other mode is active)
 
 ### Task 6: App.tsx wiring
-- [ ] Pass `onHint={showHint}` and `won={game.won}` to `<NumberPad>`
+- [x] Pass `onHint={showHint}` and `won={game.won}` to `<NumberPad>`
 
 ### Task 7: Styles
 - [ ] Add `.hint-btn` CSS to `src/index.css`: amber/yellow tint (e.g. `color: #f57f17; border-color: #f9a825`) similar in size/shape to `.notes-btn`

@@ -2,6 +2,7 @@ import { useSnapshot } from "valtio"
 import { Board } from "./components/Board"
 import { NumberPad } from "./components/NumberPad"
 import { StatusBar } from "./components/StatusBar"
+import { showHint } from "./store/hintStore"
 import { getOverlay, jumpState } from "./store/jumpStore"
 import type { Difficulty } from "./sudoku"
 import { useGame } from "./useGame"
@@ -55,7 +56,7 @@ function App() {
                 onClear={game.clearCell}
                 onUndo={game.undo}
                 onRedo={game.redo}
-                onHint={() => {}}
+                onHint={showHint}
                 undoDisabled={!game.canUndo}
                 redoDisabled={!game.canRedo}
                 notesMode={game.notesMode}
