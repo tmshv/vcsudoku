@@ -2,6 +2,12 @@ import { proxy } from "valtio"
 
 export type Theme = "system" | "light" | "dark"
 
+export const THEME_OPTIONS: { label: string; value: Theme }[] = [
+    { label: "System", value: "system" },
+    { label: "Light", value: "light" },
+    { label: "Dark", value: "dark" },
+]
+
 const STORAGE_KEY = "vcsudoku-theme"
 
 interface ThemeState {

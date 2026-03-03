@@ -1,7 +1,7 @@
 import { Settings } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { useSnapshot } from "valtio"
-import { setTheme, type Theme, themeState } from "../store/themeStore"
+import { setTheme, THEME_OPTIONS, themeState } from "../store/themeStore"
 
 export function SettingsPanel() {
     const [open, setOpen] = useState(false)
@@ -22,12 +22,6 @@ export function SettingsPanel() {
         return () => document.removeEventListener("mousedown", handleClick)
     }, [open])
 
-    const options: { label: string; value: Theme }[] = [
-        { label: "System", value: "system" },
-        { label: "Light", value: "light" },
-        { label: "Dark", value: "dark" },
-    ]
-
     return (
         <div ref={panelRef}>
             <button
@@ -42,7 +36,7 @@ export function SettingsPanel() {
                 <div className="settings-panel">
                     <h3>Theme</h3>
                     <div className="theme-options">
-                        {options.map(({ label, value }) => (
+                        {THEME_OPTIONS.map(({ label, value }) => (
                             <button
                                 type="button"
                                 key={value}
