@@ -12,10 +12,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Run all tests:** `npm run test` (runs `vitest run`)
 - **Run a single test file:** `npx vitest run src/sudoku.test.ts`
 - **Run tests matching a pattern:** `npx vitest run -t "pattern"`
+- **Generate PWA icons:** `npm run generate-pwa-assets` (runs `pwa-assets-generator --preset minimal public/icon.svg`, outputs to `public/`)
 
 ## Tech Stack
 
-React 19, TypeScript 5.9, Vite 7, Valtio 2 (with valtio-history for undo/redo), Vitest 4 with jsdom environment, @testing-library/react for hook testing. Node 24 (specified in `mise.toml`).
+React 19, TypeScript 5.9, Vite 7, Valtio 2 (with valtio-history for undo/redo), Vitest 4 with jsdom environment, @testing-library/react for hook testing, vite-plugin-pwa (Workbox-based service worker + web manifest), @vite-pwa/assets-generator (icon generation from SVG). Node 24 (specified in `mise.toml`).
 
 ## Architecture
 
@@ -25,6 +26,7 @@ This is a browser-based Sudoku game. All source code is in `src/`.
 
 - **`store/gameStore.ts`** — Two Valtio proxies: `gameData` (proxyWithHistory wrapping board + notes, enables undo/redo) and `gameUI` (plain proxy for solution, initial, selected, difficulty, elapsed, notesMode). All game mutations and derived computations (`computeErrors`, `computeWon`) live here. Also exports `fillCandidateNotes` (fills selected cell's notes with valid candidates) and `fillAllCandidateNotes` (fills all empty non-initial cells); both guard against the won state and save a single undo history entry.
 - **`store/jumpStore.ts`** — Jump mode state machine (Valtio proxy). Space activates, two digits (row, col) jump to a cell, Escape cancels. Provides `getOverlay` for cell coordinate labels.
+- **`store/themeStore.ts`** — Theme state (system/light/dark) with localStorage persistence.
 
 ### Hooks
 
@@ -42,6 +44,7 @@ This is a browser-based Sudoku game. All source code is in `src/`.
 - **`components/Cell.tsx`** — Renders a single cell: value, notes (3x3 grid of candidate digits), overlay label, or empty.
 - **`components/NumberPad.tsx`** — Number buttons 1-9 (disabled when all 9 instances placed), Notes toggle, Erase button, Undo/Redo buttons.
 - **`components/StatusBar.tsx`** — Contextual shortcut hints. Shows jump mode prompts when active, default navigation shortcuts otherwise.
+- **`components/SettingsPanel.tsx`** — Fixed gear button + theme picker panel (system/light/dark).
 
 ### Styles
 
