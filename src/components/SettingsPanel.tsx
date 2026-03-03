@@ -43,7 +43,7 @@ export function SettingsPanel({ difficulty, onNewGame }: SettingsPanelProps) {
     }, [open])
 
     return (
-        <div ref={panelRef}>
+        <div ref={panelRef} className="settings-wrapper">
             <button
                 type="button"
                 className="settings-gear"

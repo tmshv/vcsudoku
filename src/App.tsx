@@ -20,14 +20,14 @@ function App() {
 
     return (
         <>
-            <SettingsPanel
-                difficulty={game.difficulty}
-                onNewGame={game.newGame}
-            />
             <div className="app">
                 <div className="app-header">
                     <h1>Sudoku</h1>
                     <div className="timer">{formatTime(game.elapsed)}</div>
+                    <SettingsPanel
+                        difficulty={game.difficulty}
+                        onNewGame={game.newGame}
+                    />
                 </div>
 
                 <Board
