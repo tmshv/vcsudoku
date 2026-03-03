@@ -365,40 +365,32 @@ h1 {
     animation: digit-complete-flash 1.4s ease-out;
 }
 
-.notes-btn {
-    width: auto;
-    padding: 0 16px;
+.num-action {
     font-size: 0.85rem;
     color: var(--color-text-muted);
 }
 
-.notes-btn.notes-active {
+.notes-active {
     background: var(--color-primary);
     color: var(--color-text-on-primary);
     border-color: var(--color-primary);
 }
 
-.undo-btn,
-.redo-btn {
-    width: auto;
-    padding: 0 16px;
-    font-size: 0.85rem;
-    color: var(--color-text-muted);
-}
-
 .erase-btn {
-    width: auto;
-    padding: 0 16px;
-    font-size: 0.85rem;
     color: var(--color-text-error);
 }
 
 .hint-btn {
+    color: var(--color-hint);
+    border-color: var(--color-hint-border);
+}
+
+.fill-notes-btn,
+.fill-last-btn {
     width: auto;
     padding: 0 16px;
     font-size: 0.85rem;
-    color: var(--color-hint);
-    border-color: var(--color-hint-border);
+    color: var(--color-text-muted);
 }
 
 /* Win overlay */

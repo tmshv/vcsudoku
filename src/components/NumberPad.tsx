@@ -92,14 +92,14 @@ export function NumberPad({
             })}
             <button
                 type="button"
-                className={`num-btn notes-btn${notesMode ? " notes-active" : ""}`}
+                className={`num-btn num-action${notesMode ? " notes-active" : ""}`}
                 onClick={onToggleNotesMode}
             >
                 Notes
             </button>
             <button
                 type="button"
-                className="num-btn undo-btn"
+                className="num-btn num-action"
                 disabled={undoDisabled}
                 onClick={onUndo}
             >
@@ -107,7 +107,7 @@ export function NumberPad({
             </button>
             <button
                 type="button"
-                className="num-btn redo-btn"
+                className="num-btn num-action"
                 disabled={redoDisabled}
                 onClick={onRedo}
             >
@@ -115,14 +115,14 @@ export function NumberPad({
             </button>
             <button
                 type="button"
-                className="num-btn erase-btn"
+                className="num-btn num-action erase-btn"
                 onClick={onClear}
             >
                 Erase
             </button>
             <button
                 type="button"
-                className="num-btn hint-btn"
+                className="num-btn num-action hint-btn"
                 disabled={won}
                 onClick={onHint}
             >
@@ -130,7 +130,7 @@ export function NumberPad({
             </button>
             <button
                 type="button"
-                className="num-btn fill-notes-btn"
+                className="num-btn num-action"
                 disabled={won}
                 onClick={onFillCell}
             >
@@ -138,7 +138,7 @@ export function NumberPad({
             </button>
             <button
                 type="button"
-                className="num-btn fill-last-btn"
+                className="num-btn num-action"
                 disabled={won}
                 onClick={onFillLast}
             >
