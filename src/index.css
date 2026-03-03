@@ -376,11 +376,11 @@ h1 {
     border-color: var(--color-primary);
 }
 
-.erase-btn {
+.num-danger {
     color: var(--color-text-error);
 }
 
-.hint-btn {
+.num-accent {
     color: var(--color-hint);
     border-color: var(--color-hint-border);
 }

@@ -115,14 +115,14 @@ export function NumberPad({
             </button>
             <button
                 type="button"
-                className="num-btn num-action erase-btn"
+                className="num-btn num-action num-danger"
                 onClick={onClear}
             >
                 Erase
             </button>
             <button
                 type="button"
-                className="num-btn num-action hint-btn"
+                className="num-btn num-action num-accent"
                 disabled={won}
                 onClick={onHint}
             >
