@@ -1,6 +1,7 @@
 import { useSnapshot } from "valtio"
 import { Board } from "./components/Board"
 import { NumberPad } from "./components/NumberPad"
+import { SettingsPanel } from "./components/SettingsPanel"
 import { StatusBar } from "./components/StatusBar"
 import { showHint } from "./store/hintStore"
 import { getOverlay, jumpState } from "./store/jumpStore"
@@ -18,13 +19,16 @@ function App() {
     const jump = useSnapshot(jumpState)
 
     return (
-        <div className="app">
-            <h1>Sudoku</h1>
+        <>
+            <SettingsPanel />
+            <div className="app">
+                <h1>Sudoku</h1>
 
-            <div className="toolbar">
-                <div className="difficulty-group">
-                    {(["easy", "medium", "hard", "expert"] as Difficulty[]).map(
-                        (d) => (
+                <div className="toolbar">
+                    <div className="difficulty-group">
+                        {(
+                            ["easy", "medium", "hard", "expert"] as Difficulty[]
+                        ).map((d) => (
                             <button
                                 type="button"
                                 key={d}
@@ -33,56 +37,58 @@ function App() {
                             >
                                 {d.charAt(0).toUpperCase() + d.slice(1)}
                             </button>
-                        ),
-                    )}
-                </div>
-                <div className="timer">{formatTime(game.elapsed)}</div>
-            </div>
-
-            <Board
-                board={game.board}
-                initial={game.initial}
-                selected={game.selected}
-                errors={game.errors}
-                notes={game.notes}
-                onSelectCell={game.selectCell}
-                overlay={jump.active ? getOverlay : undefined}
-            />
-
-            <NumberPad
-                onNumber={(n) =>
-                    game.notesMode ? game.toggleNote(n) : game.placeNumber(n)
-                }
-                onClear={game.clearCell}
-                onUndo={game.undo}
-                onRedo={game.redo}
-                onHint={showHint}
-                undoDisabled={!game.canUndo}
-                redoDisabled={!game.canRedo}
-                notesMode={game.notesMode}
-                onToggleNotesMode={game.toggleNotesMode}
-                board={game.board}
-                errors={game.errors}
-                won={game.won}
-            />
-
-            <StatusBar />
-
-            {game.won && (
-                <div className="win-overlay">
-                    <div className="win-message">
-                        <h2>You Win!</h2>
-                        <p>Completed in {formatTime(game.elapsed)}</p>
-                        <button
-                            type="button"
-                            onClick={() => game.newGame(game.difficulty)}
-                        >
-                            Play Again
-                        </button>
+                        ))}
                     </div>
+                    <div className="timer">{formatTime(game.elapsed)}</div>
                 </div>
-            )}
-        </div>
+
+                <Board
+                    board={game.board}
+                    initial={game.initial}
+                    selected={game.selected}
+                    errors={game.errors}
+                    notes={game.notes}
+                    onSelectCell={game.selectCell}
+                    overlay={jump.active ? getOverlay : undefined}
+                />
+
+                <NumberPad
+                    onNumber={(n) =>
+                        game.notesMode
+                            ? game.toggleNote(n)
+                            : game.placeNumber(n)
+                    }
+                    onClear={game.clearCell}
+                    onUndo={game.undo}
+                    onRedo={game.redo}
+                    onHint={showHint}
+                    undoDisabled={!game.canUndo}
+                    redoDisabled={!game.canRedo}
+                    notesMode={game.notesMode}
+                    onToggleNotesMode={game.toggleNotesMode}
+                    board={game.board}
+                    errors={game.errors}
+                    won={game.won}
+                />
+
+                <StatusBar />
+
+                {game.won && (
+                    <div className="win-overlay">
+                        <div className="win-message">
+                            <h2>You Win!</h2>
+                            <p>Completed in {formatTime(game.elapsed)}</p>
+                            <button
+                                type="button"
+                                onClick={() => game.newGame(game.difficulty)}
+                            >
+                                Play Again
+                            </button>
+                        </div>
+                    </div>
+                )}
+            </div>
+        </>
     )
 }
 
