@@ -98,19 +98,12 @@ button:focus-visible {
     --color-hint-border: #d4a017;
 }
 
-html {
-    height: 100%;
-    overscroll-behavior: none;
-}
-
 body {
     font-family: system-ui, -apple-system, sans-serif;
     background: var(--color-bg);
     display: flex;
     justify-content: center;
-    height: 100%;
-    overflow: hidden;
-    overscroll-behavior: none;
+    min-height: 100vh;
 }
 
 .app {
@@ -123,8 +116,26 @@ body {
         max(16px, env(safe-area-inset-left));
     max-width: 540px;
     width: 100%;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+}
+
+/* Mobile: lock page scroll to prevent bounce/drag in PWA and Safari */
+@media (pointer: coarse) {
+    html {
+        height: 100%;
+        overscroll-behavior: none;
+    }
+
+    body {
+        height: 100%;
+        min-height: unset;
+        overflow: hidden;
+        overscroll-behavior: none;
+    }
+
+    .app {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
 }
 
 h1 {
