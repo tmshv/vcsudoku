@@ -24,6 +24,7 @@ function App() {
                 <div className="app-header">
                     <h1>Sudoku</h1>
                     <div className="timer">{formatTime(game.elapsed)}</div>
+                    <div className="spacer" />
                     <SettingsPanel
                         difficulty={game.difficulty}
                         onNewGame={game.newGame}

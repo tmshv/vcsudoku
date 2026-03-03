@@ -537,9 +537,12 @@ h1 {
 }
 
 /* Settings panel */
+.spacer {
+    flex: 1;
+}
+
 .settings-wrapper {
     position: relative;
-    margin-left: auto;
 }
 
 .settings-gear {
