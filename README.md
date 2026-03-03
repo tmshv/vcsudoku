@@ -64,6 +64,26 @@ src/
   index.css           — All the styles, one file, no regrets
 ```
 
+## Installing as an app
+
+The game is a Progressive Web App (PWA) and can be installed on your device for offline play and a native app feel.
+
+**iOS (Safari)**
+
+1. Open the game URL in Safari
+2. Tap the Share button (rectangle with an arrow pointing up)
+3. Scroll down and tap **Add to Home Screen**
+4. Tap **Add** — the Sudoku icon will appear on your home screen
+
+**Android (Chrome)**
+
+1. Open the game URL in Chrome
+2. Tap the three-dot menu in the top right
+3. Tap **Add to Home Screen** (or **Install app**)
+4. Tap **Add** — the icon will appear on your home screen
+
+Once installed, the app launches without browser chrome and works fully offline.
+
 ## License
 
 [MIT](LICENSE)
