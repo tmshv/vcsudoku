@@ -145,7 +145,7 @@ export function NumberPad({
                     disabled={won}
                     onClick={onFillLast}
                 >
-                    Fill
+                    Last
                 </button>
             </div>
         </div>
