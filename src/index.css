@@ -299,8 +299,7 @@ h1 {
 /* Number pad */
 .number-pad {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-direction: column;
     gap: 6px;
     margin-top: 20px;
     max-width: calc(
@@ -312,6 +311,11 @@ h1 {
         4
     );
     width: 100%;
+}
+
+.num-row {
+    display: flex;
+    gap: 6px;
 }
 
 .num-btn {
