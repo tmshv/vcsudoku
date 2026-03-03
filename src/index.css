@@ -138,16 +138,9 @@ body {
     }
 }
 
-h1 {
-    font-size: 1.8rem;
-    color: var(--color-text);
-    margin-bottom: 16px;
-}
-
-/* Toolbar */
-.toolbar {
+.app-header {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     justify-content: space-between;
     width: 100%;
     max-width: calc(
@@ -161,8 +154,14 @@ h1 {
     margin-bottom: 16px;
 }
 
+h1 {
+    font-size: 1.8rem;
+    color: var(--color-text);
+}
+
 .difficulty-group {
     display: flex;
+    flex-wrap: wrap;
     gap: 6px;
 }
 

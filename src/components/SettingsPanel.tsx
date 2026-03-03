@@ -4,8 +4,22 @@ import { useSnapshot } from "valtio"
 import { boardFromAscii } from "../export"
 import { loadBoard, newCustomGame } from "../store/gameStore"
 import { setTheme, THEME_OPTIONS, themeState } from "../store/themeStore"
+import type { Difficulty } from "../sudoku"
 
-export function SettingsPanel() {
+const DIFFICULTIES: Difficulty[] = [
+    "easy",
+    "medium",
+    "hard",
+    "master",
+    "expert",
+]
+
+interface SettingsPanelProps {
+    difficulty: Difficulty
+    onNewGame: (d: Difficulty) => void
+}
+
+export function SettingsPanel({ difficulty, onNewGame }: SettingsPanelProps) {
     const [open, setOpen] = useState(false)
     const [customValue, setCustomValue] = useState(50)
     const [importOpen, setImportOpen] = useState(false)
@@ -40,6 +54,22 @@ export function SettingsPanel() {
             </button>
             {open && (
                 <div className="settings-panel">
+                    <h3>Difficulty</h3>
+                    <div className="difficulty-group">
+                        {DIFFICULTIES.map((d) => (
+                            <button
+                                type="button"
+                                key={d}
+                                className={`diff-btn${difficulty === d ? " diff-active" : ""}`}
+                                onClick={() => {
+                                    onNewGame(d)
+                                    setOpen(false)
+                                }}
+                            >
+                                {d.charAt(0).toUpperCase() + d.slice(1)}
+                            </button>
+                        ))}
+                    </div>
                     <h3>Theme</h3>
                     <div className="theme-options">
                         {THEME_OPTIONS.map(({ label, value }) => (

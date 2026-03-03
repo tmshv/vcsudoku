@@ -6,7 +6,6 @@ import { StatusBar } from "./components/StatusBar"
 import { fillCandidateNotes, fillLastDigit } from "./store/gameStore"
 import { showHint } from "./store/hintStore"
 import { getOverlay, jumpState } from "./store/jumpStore"
-import type { Difficulty } from "./sudoku"
 import { useGame } from "./useGame"
 
 function formatTime(seconds: number) {
@@ -21,31 +20,13 @@ function App() {
 
     return (
         <>
-            <SettingsPanel />
+            <SettingsPanel
+                difficulty={game.difficulty}
+                onNewGame={game.newGame}
+            />
             <div className="app">
-                <h1>Sudoku</h1>
-
-                <div className="toolbar">
-                    <div className="difficulty-group">
-                        {(
-                            [
-                                "easy",
-                                "medium",
-                                "hard",
-                                "master",
-                                "expert",
-                            ] as Difficulty[]
-                        ).map((d) => (
-                            <button
-                                type="button"
-                                key={d}
-                                className={`diff-btn ${game.difficulty === d ? "diff-active" : ""}`}
-                                onClick={() => game.newGame(d)}
-                            >
-                                {d.charAt(0).toUpperCase() + d.slice(1)}
-                            </button>
-                        ))}
-                    </div>
+                <div className="app-header">
+                    <h1>Sudoku</h1>
                     <div className="timer">{formatTime(game.elapsed)}</div>
                 </div>
 
