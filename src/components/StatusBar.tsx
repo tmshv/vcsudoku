@@ -1,4 +1,5 @@
 import { useSnapshot } from "valtio"
+import { clipboardState } from "../store/clipboardStore"
 import { findState } from "../store/findStore"
 import {
     type CellPos,
@@ -21,13 +22,14 @@ function useStatusHint(): StatusHint | null {
     const hint = useSnapshot(hintState)
     const dataSnap = useSnapshot(gameData)
     const uiSnap = useSnapshot(gameUI)
+    const clipboard = useSnapshot(clipboardState)
     const hasLastOne =
         findLastOneCell(
             dataSnap.value.board as number[][],
             uiSnap.selected as CellPos | null,
         ) !== null
 
-    if (uiSnap.copied) {
+    if (clipboard.copied) {
         return {
             label: "COPIED",
             text: "Board copied to clipboard",

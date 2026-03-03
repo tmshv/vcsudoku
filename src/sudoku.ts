@@ -32,6 +32,7 @@ function shuffle<T>(arr: T[]): T[] {
     return a
 }
 
+// NOTE: Mutates `board` in place. Callers that need the original intact must pass a copy.
 export function solve(board: Board, randomize = false): Board | null {
     for (let r = 0; r < 9; r++) {
         for (let c = 0; c < 9; c++) {

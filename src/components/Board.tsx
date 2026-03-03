@@ -1,4 +1,6 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react"
+import { useEffect, useLayoutEffect, useRef } from "react"
+import { useFlashAnimation } from "../hooks/useFlashAnimation"
+import { computeFull } from "../store/gameStore"
 import type { CellPos } from "../useGame"
 import { Cell } from "./Cell"
 
@@ -28,16 +30,7 @@ export function Board({
 }: BoardProps) {
     const selectedValue = selected ? board[selected.row][selected.col] : 0
 
-    const completedDigits = new Set<number>()
-    const digitCounts = new Map<number, number>()
-    for (let r = 0; r < 9; r++)
-        for (let c = 0; c < 9; c++) {
-            const v = board[r][c]
-            if (v !== 0 && !errors.has(`${r},${c}`))
-                digitCounts.set(v, (digitCounts.get(v) ?? 0) + 1)
-        }
-    for (const [digit, count] of digitCounts)
-        if (count >= 9) completedDigits.add(digit)
+    const completedDigits = computeFull(board, errors)
 
     const completedRows = new Set<number>()
     const completedCols = new Set<number>()
@@ -80,35 +73,19 @@ export function Board({
     // that cell. Using counts (instead of a boolean Set) ensures that intersection
     // cells shared by two overlapping flashes stay lit until the last timer clears them:
     // each timer only decrements, and a cell is removed only when its count reaches 0.
-    const [flashCells, setFlashCells] = useState(
-        () => new Map<string, number>(),
-    )
+    const {
+        flashMap: flashCells,
+        flash: flashBoard,
+        reset: resetFlash,
+    } = useFlashAnimation<string>(700)
 
-    // Holds all pending flash-clear timers so they can be cancelled on unmount or
-    // new-game reset. We intentionally do NOT cancel these timers when completedSig
-    // changes: each timer clears only its own cells via closure, so concurrent timers
-    // are safe. Cancelling on re-run would leave cells permanently stuck in flashCells
-    // if a second completion (or an undo) fires within the 700 ms window.
-    const flashTimersRef = useRef<ReturnType<typeof setTimeout>[]>([])
-
-    useEffect(() => {
-        return () => {
-            for (const t of flashTimersRef.current) clearTimeout(t)
-        }
-    }, [])
-
-    // Reset all flash state when a new game starts (initial changes). Clears any
-    // residual flashCells entries, cancels pending timers, and resets the previous
-    // completion tracking so old animations cannot bleed into the new puzzle.
-    // useLayoutEffect ensures this runs synchronously before the browser paints, so
-    // stale flashCells from the previous game are never visible on the first frame.
-    // Calling setFlashCells inside useLayoutEffect triggers a synchronous re-render
-    // before paint, guaranteeing a clean slate for the new puzzle.
+    // Reset all flash state when a new game starts (initial changes). Calls resetFlash()
+    // to cancel pending timers and clear the map, then resets the previous completion
+    // tracking so old animations cannot bleed into the new puzzle.
+    // useLayoutEffect ensures this runs synchronously before the browser paints.
     // biome-ignore lint: initial is a prop — its reference change is the intended trigger
     useLayoutEffect(() => {
-        for (const t of flashTimersRef.current) clearTimeout(t)
-        flashTimersRef.current = []
-        setFlashCells(new Map())
+        resetFlash()
         prevCompletedRef.current = {
             rows: new Set<number>(),
             cols: new Set<number>(),
@@ -152,28 +129,7 @@ export function Board({
                     cells.add(`${r},${c}`)
             }
 
-        setFlashCells((prev) => {
-            const next = new Map(prev)
-            for (const cell of cells) next.set(cell, (next.get(cell) ?? 0) + 1)
-            return next
-        })
-
-        const timer = setTimeout(() => {
-            setFlashCells((prev) => {
-                const next = new Map(prev)
-                for (const cell of cells) {
-                    const count = next.get(cell) ?? 0
-                    if (count <= 1) next.delete(cell)
-                    else next.set(cell, count - 1)
-                }
-                return next
-            })
-            flashTimersRef.current = flashTimersRef.current.filter(
-                (t) => t !== timer,
-            )
-        }, 700)
-
-        flashTimersRef.current.push(timer)
+        flashBoard(cells)
     }, [completedSig])
 
     return (

@@ -1,5 +1,6 @@
 import { useEffect } from "react"
 import { boardToAscii } from "./export"
+import { setCopied } from "./store/clipboardStore"
 import { handleKey as findHandleKey } from "./store/findStore"
 import {
     clearCell,
@@ -108,10 +109,7 @@ export function useKeyboard() {
                 navigator.clipboard.writeText(
                     boardToAscii(gameData.value.board),
                 )
-                gameUI.copied = true
-                setTimeout(() => {
-                    gameUI.copied = false
-                }, 2000)
+                setCopied()
             } else if (e.key === "Escape") {
                 dismissHint()
             }
