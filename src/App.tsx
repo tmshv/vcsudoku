@@ -27,7 +27,13 @@ function App() {
                 <div className="toolbar">
                     <div className="difficulty-group">
                         {(
-                            ["easy", "medium", "hard", "expert"] as Difficulty[]
+                            [
+                                "easy",
+                                "medium",
+                                "hard",
+                                "master",
+                                "expert",
+                            ] as Difficulty[]
                         ).map((d) => (
                             <button
                                 type="button"

@@ -98,12 +98,19 @@ button:focus-visible {
     --color-hint-border: #d4a017;
 }
 
+html {
+    height: 100%;
+    overscroll-behavior: none;
+}
+
 body {
     font-family: system-ui, -apple-system, sans-serif;
     background: var(--color-bg);
     display: flex;
     justify-content: center;
-    min-height: 100vh;
+    height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
 }
 
 .app {
@@ -116,6 +123,8 @@ body {
         max(16px, env(safe-area-inset-left));
     max-width: 540px;
     width: 100%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 }
 
 h1 {
@@ -521,9 +530,9 @@ h1 {
     right: max(16px, env(safe-area-inset-right));
     width: 36px;
     height: 36px;
-    border: 1px solid var(--color-border);
+    border: 1px solid transparent;
     border-radius: var(--radius-btn);
-    background: var(--color-surface);
+    background: transparent;
     color: var(--color-text-muted);
     cursor: pointer;
     display: flex;
@@ -533,8 +542,10 @@ h1 {
     transition: all 0.15s;
 }
 
-.settings-gear:hover {
-    border-color: var(--color-primary);
+.settings-gear:hover,
+.settings-gear:active {
+    border-color: var(--color-border);
+    background: var(--color-surface);
     color: var(--color-primary);
 }
 
