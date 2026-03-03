@@ -199,6 +199,9 @@ export function newGame(difficulty: Difficulty) {
     const data = createInitialData(puzzle)
     gameData.value.board = data.board
     gameData.value.notes = data.notes
+    // valtio-history has no public "reset history" API, so we directly clear the
+    // internal nodes array and reset the index. If valtio-history adds a public
+    // reset method in a future version, this should be updated to use it.
     gameData.history.nodes.splice(0)
     gameData.history.index = -1
     gameData.saveHistory()
