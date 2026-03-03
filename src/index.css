@@ -141,7 +141,7 @@ body {
 .app-header {
     display: flex;
     align-items: baseline;
-    justify-content: space-between;
+    gap: 12px;
     width: 100%;
     max-width: calc(
         var(--cell-size) *
