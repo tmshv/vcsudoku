@@ -24,7 +24,7 @@ This is a browser-based Sudoku game. All source code is in `src/`.
 
 ### Store layer
 
-- **`store/gameStore.ts`** — Two Valtio proxies: `gameData` (proxyWithHistory wrapping board + notes, enables undo/redo) and `gameUI` (plain proxy for solution, initial, selected, difficulty, elapsed, notesMode). All game mutations and derived computations (`computeErrors`, `computeWon`) live here. Also exports `fillCandidateNotes` (fills selected cell's notes with valid candidates) and `fillAllCandidateNotes` (fills all empty non-initial cells); both guard against the won state and save a single undo history entry.
+- **`store/gameStore.ts`** — Two Valtio proxies: `gameData` (proxyWithHistory wrapping board + notes, enables undo/redo) and `gameUI` (plain proxy for solution, initial, selected, difficulty, elapsed, notesMode). All game mutations and derived computations (`computeErrors`, `computeWon`) live here. Exports `fillCandidateNotes` (fills selected cell's notes with valid candidates), `fillLastDigit` (fills cells that have only one candidate), `fillAllCandidateNotes` (fills all empty non-initial cells), `newCustomGame(cellsToRemove)`, and `loadBoard(puzzle)` (validates and loads an externally provided puzzle).
 - **`store/jumpStore.ts`** — Jump mode state machine (Valtio proxy). Space activates, two digits (row, col) jump to a cell, Escape cancels. Provides `getOverlay` for cell coordinate labels.
 - **`store/themeStore.ts`** — Theme state (system/light/dark) with localStorage persistence.
 
@@ -35,16 +35,18 @@ This is a browser-based Sudoku game. All source code is in `src/`.
 
 ### Pure logic
 
-- **`sudoku.ts`** — Board validation (`isValidPlacement`), backtracking solver (`solve`), puzzle generation (`generatePuzzle`) with difficulty-based cell removal counts (easy=38, medium=46, hard=53, expert=58 cells removed).
+- **`sudoku.ts`** — Board validation (`isValidPlacement`), backtracking solver (`solve`), puzzle generation (`generatePuzzle`) with difficulty-based cell removal counts (easy=38, medium=46, hard=53, master=55, expert=58 cells removed). Also exports `generateCustomPuzzle(cellsToRemove)` for arbitrary removal counts.
+- **`hint.ts`** — Hint engine: tries naked singles → hidden singles (row/col/box) → MRV fallback (most constrained empty cell).
+- **`export.ts`** — ASCII board export (`boardToAscii`) and import (`boardFromAscii`).
 
 ### Components
 
-- **`App.tsx`** — Root component. Composes the toolbar (difficulty buttons, timer), Board, NumberPad, StatusBar, and win overlay.
+- **`App.tsx`** — Root component. Header contains title, timer, and `SettingsPanel` (gear in normal flow, pushed right by a `.spacer`). Composes Board, NumberPad, StatusBar, and win overlay.
 - **`components/Board.tsx`** — Renders 9x9 grid, computes per-cell visual states (selected, highlighted row/col/box, same-number highlighting, errors, digit-complete dimming, line-complete animation). Accepts an `overlay` render prop for jump mode labels.
 - **`components/Cell.tsx`** — Renders a single cell: value, notes (3x3 grid of candidate digits), overlay label, or empty.
-- **`components/NumberPad.tsx`** — Number buttons 1-9 (disabled when all 9 instances placed), Notes toggle, Erase button, Undo/Redo buttons.
-- **`components/StatusBar.tsx`** — Contextual shortcut hints. Shows jump mode prompts when active, default navigation shortcuts otherwise.
-- **`components/SettingsPanel.tsx`** — Fixed gear button + theme picker panel (system/light/dark).
+- **`components/NumberPad.tsx`** — Two rows: digits 1-9 (top), and action buttons (Notes toggle, Undo, Redo, Erase, Hint, Notes✦, Last) on the bottom. Digit buttons disable when all 9 placed.
+- **`components/StatusBar.tsx`** — Contextual shortcut hints. Hidden on touch devices (`pointer: coarse`). Shows jump mode prompts when active, default navigation shortcuts otherwise.
+- **`components/SettingsPanel.tsx`** — Gear button (in-flow in header) + dropdown panel with: difficulty picker, theme picker (system/light/dark), custom difficulty (cells-removed input), and ASCII board import.
 
 ### Styles
 
@@ -58,6 +60,11 @@ This is a browser-based Sudoku game. All source code is in `src/`.
 
 - Markdown tables must have columns aligned with spaces so that pipe characters form straight vertical lines.
 - In markdown code blocks, inline comments must be aligned vertically with spaces.
+
+## Worktrees
+
+- Worktree directory: `.worktrees/` (project-local, already in `.gitignore`)
+- Always create a GitHub issue first, then create a worktree branch named `issue-XX`
 
 ## Testing Patterns
 
