@@ -24,7 +24,6 @@ interface GameUI {
     difficulty: Difficulty
     elapsed: number
     notesMode: boolean
-    copied: boolean
 }
 
 function emptyNotes(): number[][][] {
@@ -52,7 +51,6 @@ function createInitialUI(
         difficulty,
         elapsed: 0,
         notesMode: false,
-        copied: false,
     }
 }
 
