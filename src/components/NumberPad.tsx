@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef } from "react"
+import { useFlashAnimation } from "../hooks/useFlashAnimation"
 import { computeFull } from "../store/gameStore"
 
 interface NumberPadProps {
@@ -45,17 +46,8 @@ export function NumberPad({
     const prevFull = useRef(new Set<number>())
     const isFirstRun = useRef(true)
 
-    const [flashDigits, setFlashDigits] = useState(
-        () => new Map<number, number>(),
-    )
-    const flashTimersRef = useRef<ReturnType<typeof setTimeout>[]>([])
-
-    // Cancel all pending timers on unmount.
-    useEffect(() => {
-        return () => {
-            for (const t of flashTimersRef.current) clearTimeout(t)
-        }
-    }, [])
+    const { flashMap: flashDigits, flash: flashPad } =
+        useFlashAnimation<number>(1400)
 
     useEffect(() => {
         const currentFull = computeFull(board, errors)
@@ -75,29 +67,8 @@ export function NumberPad({
 
         if (newlyComplete.length === 0) return
 
-        setFlashDigits((prev) => {
-            const next = new Map(prev)
-            for (const n of newlyComplete) next.set(n, (next.get(n) ?? 0) + 1)
-            return next
-        })
-
-        const timer = setTimeout(() => {
-            setFlashDigits((prev) => {
-                const next = new Map(prev)
-                for (const n of newlyComplete) {
-                    const count = next.get(n) ?? 0
-                    if (count <= 1) next.delete(n)
-                    else next.set(n, count - 1)
-                }
-                return next
-            })
-            flashTimersRef.current = flashTimersRef.current.filter(
-                (t) => t !== timer,
-            )
-        }, 1400)
-
-        flashTimersRef.current.push(timer)
-    }, [board, errors])
+        flashPad(newlyComplete)
+    }, [board, errors, flashPad])
 
     return (
         <div className="number-pad">
