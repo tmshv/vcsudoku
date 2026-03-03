@@ -1,10 +1,11 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
-const { mockSetTheme, mockThemeState } = vi.hoisted(() => {
+const { mockSetTheme, mockThemeState, mockNewCustomGame } = vi.hoisted(() => {
     const mockThemeState = { theme: "system" }
     const mockSetTheme = vi.fn()
-    return { mockThemeState, mockSetTheme }
+    const mockNewCustomGame = vi.fn()
+    return { mockThemeState, mockSetTheme, mockNewCustomGame }
 })
 
 vi.mock("../store/themeStore", () => ({
@@ -15,6 +16,10 @@ vi.mock("../store/themeStore", () => ({
         { label: "Light", value: "light" },
         { label: "Dark", value: "dark" },
     ],
+}))
+
+vi.mock("../store/gameStore", () => ({
+    newCustomGame: mockNewCustomGame,
 }))
 
 vi.mock("valtio", () => ({

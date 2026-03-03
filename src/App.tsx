@@ -3,6 +3,7 @@ import { Board } from "./components/Board"
 import { NumberPad } from "./components/NumberPad"
 import { SettingsPanel } from "./components/SettingsPanel"
 import { StatusBar } from "./components/StatusBar"
+import { fillCandidateNotes, fillLastDigit } from "./store/gameStore"
 import { showHint } from "./store/hintStore"
 import { getOverlay, jumpState } from "./store/jumpStore"
 import type { Difficulty } from "./sudoku"
@@ -68,6 +69,8 @@ function App() {
                     onUndo={game.undo}
                     onRedo={game.redo}
                     onHint={showHint}
+                    onFillCell={fillCandidateNotes}
+                    onFillLast={fillLastDigit}
                     undoDisabled={!game.canUndo}
                     redoDisabled={!game.canRedo}
                     notesMode={game.notesMode}

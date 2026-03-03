@@ -8,6 +8,8 @@ interface NumberPadProps {
     onUndo: () => void
     onRedo: () => void
     onHint: () => void
+    onFillCell: () => void
+    onFillLast: () => void
     undoDisabled: boolean
     redoDisabled: boolean
     notesMode: boolean
@@ -23,6 +25,8 @@ export function NumberPad({
     onUndo,
     onRedo,
     onHint,
+    onFillCell,
+    onFillLast,
     undoDisabled,
     redoDisabled,
     notesMode,
@@ -123,6 +127,22 @@ export function NumberPad({
                 onClick={onHint}
             >
                 Hint
+            </button>
+            <button
+                type="button"
+                className="num-btn fill-notes-btn"
+                disabled={won}
+                onClick={onFillCell}
+            >
+                Notes✦
+            </button>
+            <button
+                type="button"
+                className="num-btn fill-last-btn"
+                disabled={won}
+                onClick={onFillLast}
+            >
+                Fill
             </button>
         </div>
     )

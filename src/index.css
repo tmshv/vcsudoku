@@ -600,6 +600,34 @@ h1 {
     border-color: var(--color-primary);
 }
 
+.custom-difficulty {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.custom-cells-input {
+    width: 56px;
+    padding: 4px 8px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-btn);
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.custom-play-btn {
+    padding: 4px 12px;
+    border: 1px solid var(--color-primary);
+    border-radius: var(--radius-btn);
+    background: var(--color-primary);
+    color: var(--color-text-on-primary);
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
 @media (max-width: 380px) {
     .win-message {
         padding: 24px;

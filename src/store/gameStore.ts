@@ -3,8 +3,10 @@ import { proxyWithHistory } from "valtio-history"
 import {
     type Board,
     type Difficulty,
+    generateCustomPuzzle,
     generatePuzzle,
     isValidPlacement,
+    solve,
 } from "../sudoku"
 
 export interface CellPos {
@@ -24,6 +26,7 @@ interface GameUI {
     difficulty: Difficulty
     elapsed: number
     notesMode: boolean
+    customCells: number | null
 }
 
 function emptyNotes(): number[][][] {
@@ -51,6 +54,7 @@ function createInitialUI(
         difficulty,
         elapsed: 0,
         notesMode: false,
+        customCells: null,
     }
 }
 
@@ -228,6 +232,46 @@ export function newGame(difficulty: Difficulty) {
     gameUI.difficulty = ui.difficulty
     gameUI.elapsed = ui.elapsed
     gameUI.notesMode = ui.notesMode
+    gameUI.customCells = null
+}
+
+export function newCustomGame(cellsToRemove: number) {
+    const { puzzle, solution } = generateCustomPuzzle(cellsToRemove)
+
+    const data = createInitialData(puzzle)
+    gameData.value.board = data.board
+    gameData.value.notes = data.notes
+    gameData.history.nodes.splice(0)
+    gameData.history.index = -1
+    gameData.saveHistory()
+
+    const ui = createInitialUI(solution, puzzle, "easy")
+    gameUI.solution = ui.solution
+    gameUI.initial = ui.initial
+    gameUI.selected = ui.selected
+    gameUI.elapsed = 0
+    gameUI.notesMode = false
+    gameUI.customCells = Math.max(20, Math.min(64, cellsToRemove))
+}
+
+export function loadBoard(puzzle: number[][]): boolean {
+    const solutionBoard = puzzle.map((row) => [...row])
+    if (!solve(solutionBoard)) return false
+
+    const data = createInitialData(puzzle.map((row) => [...row]))
+    gameData.value.board = data.board
+    gameData.value.notes = data.notes
+    gameData.history.nodes.splice(0)
+    gameData.history.index = -1
+    gameData.saveHistory()
+
+    gameUI.solution = solutionBoard
+    gameUI.initial = puzzle.map((row) => row.map((v) => v !== 0))
+    gameUI.selected = null
+    gameUI.elapsed = 0
+    gameUI.notesMode = false
+    gameUI.customCells = null
+    return true
 }
 
 export function findLastOneCell(

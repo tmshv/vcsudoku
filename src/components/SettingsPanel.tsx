@@ -1,10 +1,12 @@
 import { Settings } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { useSnapshot } from "valtio"
+import { newCustomGame } from "../store/gameStore"
 import { setTheme, THEME_OPTIONS, themeState } from "../store/themeStore"
 
 export function SettingsPanel() {
     const [open, setOpen] = useState(false)
+    const [customValue, setCustomValue] = useState(50)
     const panelRef = useRef<HTMLDivElement>(null)
     const snap = useSnapshot(themeState)
 
@@ -46,6 +48,31 @@ export function SettingsPanel() {
                                 {label}
                             </button>
                         ))}
+                    </div>
+                    <h3>Custom Difficulty</h3>
+                    <div className="custom-difficulty">
+                        <label htmlFor="custom-cells">Cells removed</label>
+                        <input
+                            id="custom-cells"
+                            type="number"
+                            min={20}
+                            max={64}
+                            value={customValue}
+                            onChange={(e) =>
+                                setCustomValue(Number(e.target.value))
+                            }
+                            className="custom-cells-input"
+                        />
+                        <button
+                            type="button"
+                            className="custom-play-btn"
+                            onClick={() => {
+                                newCustomGame(customValue)
+                                setOpen(false)
+                            }}
+                        >
+                            Play
+                        </button>
                     </div>
                 </div>
             )}
