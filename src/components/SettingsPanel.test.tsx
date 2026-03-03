@@ -60,12 +60,12 @@ describe("SettingsPanel", () => {
         mockThemeState.theme = "dark"
         render(<SettingsPanel />)
         fireEvent.click(screen.getByRole("button", { name: "Settings" }))
-        expect(screen.getByRole("button", { name: "Dark" }).className).toContain(
-            "theme-option-active",
-        )
-        expect(screen.getByRole("button", { name: "Light" }).className).not.toContain(
-            "theme-option-active",
-        )
+        expect(
+            screen.getByRole("button", { name: "Dark" }).className,
+        ).toContain("theme-option-active")
+        expect(
+            screen.getByRole("button", { name: "Light" }).className,
+        ).not.toContain("theme-option-active")
     })
 
     it("clicking outside closes the panel", () => {
