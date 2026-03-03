@@ -1,3 +1,4 @@
+import { Settings } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { useSnapshot } from "valtio"
 import { setTheme, type Theme, themeState } from "../store/themeStore"
@@ -35,7 +36,7 @@ export function SettingsPanel() {
                 onClick={() => setOpen((v) => !v)}
                 aria-label="Settings"
             >
-                ⚙
+                <Settings size={16} aria-hidden="true" />
             </button>
             {open && (
                 <div className="settings-panel">
