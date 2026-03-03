@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react"
+import { computeFull } from "../store/gameStore"
 import type { CellPos } from "../useGame"
 import { Cell } from "./Cell"
 
@@ -28,16 +29,7 @@ export function Board({
 }: BoardProps) {
     const selectedValue = selected ? board[selected.row][selected.col] : 0
 
-    const completedDigits = new Set<number>()
-    const digitCounts = new Map<number, number>()
-    for (let r = 0; r < 9; r++)
-        for (let c = 0; c < 9; c++) {
-            const v = board[r][c]
-            if (v !== 0 && !errors.has(`${r},${c}`))
-                digitCounts.set(v, (digitCounts.get(v) ?? 0) + 1)
-        }
-    for (const [digit, count] of digitCounts)
-        if (count >= 9) completedDigits.add(digit)
+    const completedDigits = computeFull(board, errors)
 
     const completedRows = new Set<number>()
     const completedCols = new Set<number>()

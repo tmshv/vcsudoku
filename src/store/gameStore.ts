@@ -94,6 +94,19 @@ export function computeWon(board: Board, solution: Board): boolean {
     )
 }
 
+export function computeFull(board: Board, errors: Set<string>): Set<number> {
+    const counts = new Map<number, number>()
+    for (let r = 0; r < 9; r++)
+        for (let c = 0; c < 9; c++) {
+            const v = board[r][c]
+            if (v !== 0 && !errors.has(`${r},${c}`))
+                counts.set(v, (counts.get(v) ?? 0) + 1)
+        }
+    const full = new Set<number>()
+    for (const [n, count] of counts) if (count >= 9) full.add(n)
+    return full
+}
+
 export function selectCell(pos: CellPos | null) {
     gameUI.selected = pos
 }

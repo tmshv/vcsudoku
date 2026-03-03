@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react"
+import { computeFull } from "../store/gameStore"
 
 interface NumberPadProps {
     onNumber: (n: number) => void
@@ -13,19 +14,6 @@ interface NumberPadProps {
     board: number[][]
     errors: Set<string>
     won: boolean
-}
-
-function computeFull(board: number[][], errors: Set<string>): Set<number> {
-    const counts = new Map<number, number>()
-    for (let r = 0; r < board.length; r++)
-        for (let c = 0; c < board[r].length; c++) {
-            const v = board[r][c]
-            if (v !== 0 && !errors.has(`${r},${c}`))
-                counts.set(v, (counts.get(v) ?? 0) + 1)
-        }
-    const full = new Set<number>()
-    for (const [n, count] of counts) if (count >= 9) full.add(n)
-    return full
 }
 
 export function NumberPad({
