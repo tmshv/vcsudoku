@@ -70,8 +70,8 @@ button:focus-visible {
     --color-bg: #121212;
     --color-surface: #1e1e2e;
     --color-surface-raised: #2a2a3a;
-    --color-board-bg: #0d1117;
-    --color-cell: #1c1c2e;
+    --color-board-bg: #2d3548;
+    --color-cell: #1c2030;
     --color-selected: #1e3a5c;
     --color-highlighted: #1a2d3d;
     --color-same-number: #252550;
@@ -81,9 +81,9 @@ button:focus-visible {
     --color-text-subtle: #6e7681;
     --color-text-secondary: #b0bec5;
     --color-text-faint: #585f69;
-    --color-text-player: #79b8ff;
-    --color-text-initial: #e6edf3;
-    --color-text-error: #ffa0a0;
+    --color-text-player: #5a8fc5;
+    --color-text-initial: #8a9aaa;
+    --color-text-error: #e08080;
     --color-text-notes: #5d7a8f;
     --color-text-dim: #3d5060;
     --color-border: #30363d;
