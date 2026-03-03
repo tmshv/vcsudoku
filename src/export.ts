@@ -1,3 +1,20 @@
+export function boardFromAscii(text: string): number[][] | null {
+    const dataLines = text
+        .split("\n")
+        .map((l) => l.trim())
+        .filter((l) => l.startsWith("|"))
+    if (dataLines.length !== 9) return null
+    const board: number[][] = []
+    for (const line of dataLines) {
+        const cells = line.replace(/\|/g, "").trim().split(/\s+/)
+        if (cells.length !== 9) return null
+        const row = cells.map((ch) => (ch === "." ? 0 : parseInt(ch, 10)))
+        if (row.some((v) => Number.isNaN(v) || v < 0 || v > 9)) return null
+        board.push(row)
+    }
+    return board.length === 9 ? board : null
+}
+
 const SEP = "+-------+-------+-------+"
 
 export function boardToAscii(board: number[][]): string {

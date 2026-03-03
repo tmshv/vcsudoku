@@ -8,6 +8,8 @@ interface NumberPadProps {
     onUndo: () => void
     onRedo: () => void
     onHint: () => void
+    onFillCell: () => void
+    onFillLast: () => void
     undoDisabled: boolean
     redoDisabled: boolean
     notesMode: boolean
@@ -23,6 +25,8 @@ export function NumberPad({
     onUndo,
     onRedo,
     onHint,
+    onFillCell,
+    onFillLast,
     undoDisabled,
     redoDisabled,
     notesMode,
@@ -72,58 +76,78 @@ export function NumberPad({
 
     return (
         <div className="number-pad">
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => {
-                const full = (counts.get(n) ?? 0) >= 9
-                return (
-                    <button
-                        type="button"
-                        key={n}
-                        className={`num-btn${full ? " num-btn-complete" : ""}${flashDigits.has(n) ? " num-btn-flash" : ""}`}
-                        disabled={full}
-                        onClick={() => onNumber(n)}
-                    >
-                        {n}
-                    </button>
-                )
-            })}
-            <button
-                type="button"
-                className={`num-btn notes-btn${notesMode ? " notes-active" : ""}`}
-                onClick={onToggleNotesMode}
-            >
-                Notes
-            </button>
-            <button
-                type="button"
-                className="num-btn undo-btn"
-                disabled={undoDisabled}
-                onClick={onUndo}
-            >
-                Undo
-            </button>
-            <button
-                type="button"
-                className="num-btn redo-btn"
-                disabled={redoDisabled}
-                onClick={onRedo}
-            >
-                Redo
-            </button>
-            <button
-                type="button"
-                className="num-btn erase-btn"
-                onClick={onClear}
-            >
-                Erase
-            </button>
-            <button
-                type="button"
-                className="num-btn hint-btn"
-                disabled={won}
-                onClick={onHint}
-            >
-                Hint
-            </button>
+            <div className="num-row">
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => {
+                    const full = (counts.get(n) ?? 0) >= 9
+                    return (
+                        <button
+                            type="button"
+                            key={n}
+                            className={`num-btn${full ? " num-btn-complete" : ""}${flashDigits.has(n) ? " num-btn-flash" : ""}`}
+                            disabled={full}
+                            onClick={() => onNumber(n)}
+                        >
+                            {n}
+                        </button>
+                    )
+                })}
+            </div>
+            <div className="num-row">
+                <button
+                    type="button"
+                    className={`num-btn num-action${notesMode ? " notes-active" : ""}`}
+                    onClick={onToggleNotesMode}
+                >
+                    Notes
+                </button>
+                <button
+                    type="button"
+                    className="num-btn num-action"
+                    disabled={undoDisabled}
+                    onClick={onUndo}
+                >
+                    Undo
+                </button>
+                <button
+                    type="button"
+                    className="num-btn num-action"
+                    disabled={redoDisabled}
+                    onClick={onRedo}
+                >
+                    Redo
+                </button>
+                <button
+                    type="button"
+                    className="num-btn num-action num-danger"
+                    onClick={onClear}
+                >
+                    Erase
+                </button>
+                <button
+                    type="button"
+                    className="num-btn num-action num-accent"
+                    disabled={won}
+                    onClick={onHint}
+                >
+                    Hint
+                </button>
+                <button
+                    type="button"
+                    className="num-btn num-action"
+                    disabled={won}
+                    onClick={onFillCell}
+                >
+                    Notes✦
+                </button>
+                <button
+                    type="button"
+                    className="num-btn num-action"
+                    disabled={won}
+                    onClick={onFillLast}
+                >
+                    Last
+                </button>
+            </div>
         </div>
     )
 }

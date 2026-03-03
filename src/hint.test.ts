@@ -145,10 +145,10 @@ describe("getHint", () => {
         const hint = getHint(board, SOLUTION)
         expect(hint).not.toBeNull()
         expect(hint?.strategy).toBe("fallback")
-        // Fallback picks first empty cell [0][0], solution value = 5
+        // MRV on empty board: all cells have 9 candidates; first cell [0][0] wins
         expect(hint?.cell).toEqual({ row: 0, col: 0 })
         expect(hint?.value).toBe(SOLUTION[0][0])
-        expect(hint?.explanation).toContain("Try placing")
+        expect(hint?.explanation).toContain("candidates")
     })
 
     it("prefers a strategy over fallback when one applies", () => {

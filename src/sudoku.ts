@@ -1,5 +1,5 @@
 export type Board = number[][]
-export type Difficulty = "easy" | "medium" | "hard" | "expert"
+export type Difficulty = "easy" | "medium" | "hard" | "master" | "expert"
 
 export function isValidPlacement(
     board: Board,
@@ -112,6 +112,36 @@ export function generateSolvedBoard(): Board {
     return board
 }
 
+export function generateCustomPuzzle(cellsToRemove: number): {
+    puzzle: Board
+    solution: Board
+} {
+    const clamped = Math.max(20, Math.min(64, cellsToRemove))
+    const solution = generateSolvedBoard()
+    const puzzle = solution.map((row) => [...row])
+
+    const positions = shuffle(
+        Array.from(
+            { length: 81 },
+            (_, i) => [Math.floor(i / 9), i % 9] as [number, number],
+        ),
+    )
+
+    let removed = 0
+    for (const [r, c] of positions) {
+        if (removed >= clamped) break
+        const saved = puzzle[r][c]
+        puzzle[r][c] = 0
+        if (!hasUniqueSolution(puzzle)) {
+            puzzle[r][c] = saved
+        } else {
+            removed++
+        }
+    }
+
+    return { puzzle, solution }
+}
+
 export function generatePuzzle(difficulty: Difficulty): {
     puzzle: Board
     solution: Board
@@ -123,6 +153,7 @@ export function generatePuzzle(difficulty: Difficulty): {
         easy: 38,
         medium: 46,
         hard: 53,
+        master: 55,
         expert: 58,
     }
 

@@ -1,10 +1,11 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
-const { mockSetTheme, mockThemeState } = vi.hoisted(() => {
+const { mockSetTheme, mockThemeState, mockNewCustomGame } = vi.hoisted(() => {
     const mockThemeState = { theme: "system" }
     const mockSetTheme = vi.fn()
-    return { mockThemeState, mockSetTheme }
+    const mockNewCustomGame = vi.fn()
+    return { mockThemeState, mockSetTheme, mockNewCustomGame }
 })
 
 vi.mock("../store/themeStore", () => ({
@@ -15,6 +16,10 @@ vi.mock("../store/themeStore", () => ({
         { label: "Light", value: "light" },
         { label: "Dark", value: "dark" },
     ],
+}))
+
+vi.mock("../store/gameStore", () => ({
+    newCustomGame: mockNewCustomGame,
 }))
 
 vi.mock("valtio", () => ({
@@ -32,17 +37,17 @@ beforeEach(() => {
 
 describe("SettingsPanel", () => {
     it("renders gear button", () => {
-        render(<SettingsPanel />)
+        render(<SettingsPanel difficulty="easy" onNewGame={vi.fn()} />)
         expect(screen.getByRole("button", { name: "Settings" })).toBeDefined()
     })
 
     it("panel is hidden by default", () => {
-        render(<SettingsPanel />)
+        render(<SettingsPanel difficulty="easy" onNewGame={vi.fn()} />)
         expect(screen.queryByText("System")).toBeNull()
     })
 
     it("clicking gear button opens the panel with all options", () => {
-        render(<SettingsPanel />)
+        render(<SettingsPanel difficulty="easy" onNewGame={vi.fn()} />)
         fireEvent.click(screen.getByRole("button", { name: "Settings" }))
         expect(screen.getByText("System")).toBeDefined()
         expect(screen.getByText("Light")).toBeDefined()
@@ -50,7 +55,7 @@ describe("SettingsPanel", () => {
     })
 
     it("clicking a theme option calls setTheme", () => {
-        render(<SettingsPanel />)
+        render(<SettingsPanel difficulty="easy" onNewGame={vi.fn()} />)
         fireEvent.click(screen.getByRole("button", { name: "Settings" }))
         fireEvent.click(screen.getByRole("button", { name: "Dark" }))
         expect(mockSetTheme).toHaveBeenCalledWith("dark")
@@ -58,7 +63,7 @@ describe("SettingsPanel", () => {
 
     it("active theme option has theme-option-active class", () => {
         mockThemeState.theme = "dark"
-        render(<SettingsPanel />)
+        render(<SettingsPanel difficulty="easy" onNewGame={vi.fn()} />)
         fireEvent.click(screen.getByRole("button", { name: "Settings" }))
         expect(
             screen.getByRole("button", { name: "Dark" }).className,
@@ -69,7 +74,7 @@ describe("SettingsPanel", () => {
     })
 
     it("clicking outside closes the panel", () => {
-        render(<SettingsPanel />)
+        render(<SettingsPanel difficulty="easy" onNewGame={vi.fn()} />)
         fireEvent.click(screen.getByRole("button", { name: "Settings" }))
         expect(screen.getByText("System")).toBeDefined()
         fireEvent.mouseDown(document.body)
@@ -77,7 +82,7 @@ describe("SettingsPanel", () => {
     })
 
     it("clicking gear again closes the panel", () => {
-        render(<SettingsPanel />)
+        render(<SettingsPanel difficulty="easy" onNewGame={vi.fn()} />)
         fireEvent.click(screen.getByRole("button", { name: "Settings" }))
         expect(screen.getByText("System")).toBeDefined()
         fireEvent.click(screen.getByRole("button", { name: "Settings" }))
