@@ -126,6 +126,24 @@ export function moveSelectionToBlock(dr: number, dc: number) {
     }
 }
 
+function clearNotesAround(row: number, col: number, num: number) {
+    const boxR = Math.floor(row / 3) * 3
+    const boxC = Math.floor(col / 3) * 3
+    for (let i = 0; i < 9; i++) {
+        gameData.value.notes[row][i] = gameData.value.notes[row][i].filter(
+            (n) => n !== num,
+        )
+        gameData.value.notes[i][col] = gameData.value.notes[i][col].filter(
+            (n) => n !== num,
+        )
+        const br = boxR + Math.floor(i / 3)
+        const bc = boxC + (i % 3)
+        gameData.value.notes[br][bc] = gameData.value.notes[br][bc].filter(
+            (n) => n !== num,
+        )
+    }
+}
+
 export function placeNumber(num: number) {
     const sel = gameUI.selected
     if (!sel) return
@@ -135,21 +153,7 @@ export function placeNumber(num: number) {
     gameData.value.board[sel.row][sel.col] = num
     gameData.value.notes[sel.row][sel.col] = []
 
-    const boxR = Math.floor(sel.row / 3) * 3
-    const boxC = Math.floor(sel.col / 3) * 3
-    for (let i = 0; i < 9; i++) {
-        gameData.value.notes[sel.row][i] = gameData.value.notes[sel.row][
-            i
-        ].filter((n) => n !== num)
-        gameData.value.notes[i][sel.col] = gameData.value.notes[i][
-            sel.col
-        ].filter((n) => n !== num)
-        const br = boxR + Math.floor(i / 3)
-        const bc = boxC + (i % 3)
-        gameData.value.notes[br][bc] = gameData.value.notes[br][bc].filter(
-            (n) => n !== num,
-        )
-    }
+    clearNotesAround(sel.row, sel.col, num)
 
     gameData.saveHistory()
 }
@@ -281,21 +285,7 @@ export function fillLastDigit() {
     gameData.value.board[pos.row][pos.col] = num
     gameData.value.notes[pos.row][pos.col] = []
 
-    const boxR = Math.floor(pos.row / 3) * 3
-    const boxC = Math.floor(pos.col / 3) * 3
-    for (let i = 0; i < 9; i++) {
-        gameData.value.notes[pos.row][i] = gameData.value.notes[pos.row][
-            i
-        ].filter((n) => n !== num)
-        gameData.value.notes[i][pos.col] = gameData.value.notes[i][
-            pos.col
-        ].filter((n) => n !== num)
-        const br = boxR + Math.floor(i / 3)
-        const bc = boxC + (i % 3)
-        gameData.value.notes[br][bc] = gameData.value.notes[br][bc].filter(
-            (n) => n !== num,
-        )
-    }
+    clearNotesAround(pos.row, pos.col, num)
 
     gameData.saveHistory()
 }
