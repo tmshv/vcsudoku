@@ -1,12 +1,16 @@
 import { Settings } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { useSnapshot } from "valtio"
-import { newCustomGame } from "../store/gameStore"
+import { boardFromAscii } from "../export"
+import { loadBoard, newCustomGame } from "../store/gameStore"
 import { setTheme, THEME_OPTIONS, themeState } from "../store/themeStore"
 
 export function SettingsPanel() {
     const [open, setOpen] = useState(false)
     const [customValue, setCustomValue] = useState(50)
+    const [importOpen, setImportOpen] = useState(false)
+    const [importText, setImportText] = useState("")
+    const [importError, setImportError] = useState(false)
     const panelRef = useRef<HTMLDivElement>(null)
     const snap = useSnapshot(themeState)
 
@@ -74,6 +78,61 @@ export function SettingsPanel() {
                             Play
                         </button>
                     </div>
+                    <h3>Import</h3>
+                    {!importOpen ? (
+                        <button
+                            type="button"
+                            className="import-open-btn"
+                            onClick={() => setImportOpen(true)}
+                        >
+                            Import ASCII board
+                        </button>
+                    ) : (
+                        <div className="import-section">
+                            <textarea
+                                className="import-textarea"
+                                placeholder="Paste ASCII board here..."
+                                value={importText}
+                                onChange={(e) => setImportText(e.target.value)}
+                                rows={11}
+                            />
+                            <div className="import-actions">
+                                <button
+                                    type="button"
+                                    className="import-load-btn"
+                                    onClick={() => {
+                                        const parsed =
+                                            boardFromAscii(importText)
+                                        if (!parsed || !loadBoard(parsed)) {
+                                            setImportError(true)
+                                            return
+                                        }
+                                        setImportOpen(false)
+                                        setImportText("")
+                                        setImportError(false)
+                                        setOpen(false)
+                                    }}
+                                >
+                                    Load
+                                </button>
+                                <button
+                                    type="button"
+                                    className="import-cancel-btn"
+                                    onClick={() => {
+                                        setImportOpen(false)
+                                        setImportError(false)
+                                    }}
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                            {importError && (
+                                <p className="import-error">
+                                    Could not parse board. Check the format.
+                                </p>
+                            )}
+                        </div>
+                    )}
                 </div>
             )}
         </div>

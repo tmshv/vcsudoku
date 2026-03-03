@@ -628,6 +628,69 @@ h1 {
     cursor: pointer;
 }
 
+.import-open-btn {
+    width: 100%;
+    padding: 6px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-btn);
+    background: var(--color-surface);
+    color: var(--color-text-secondary);
+    font-size: 0.85rem;
+    cursor: pointer;
+    text-align: center;
+}
+
+.import-section {
+    margin-top: 4px;
+}
+
+.import-textarea {
+    width: 100%;
+    font-family: monospace;
+    font-size: 0.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-btn);
+    background: var(--color-surface);
+    color: var(--color-text);
+    padding: 8px;
+    resize: none;
+    box-sizing: border-box;
+}
+
+.import-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.import-load-btn {
+    flex: 1;
+    padding: 6px;
+    background: var(--color-primary);
+    color: var(--color-text-on-primary);
+    border: none;
+    border-radius: var(--radius-btn);
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.import-cancel-btn {
+    flex: 1;
+    padding: 6px;
+    background: var(--color-surface);
+    color: var(--color-text-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-btn);
+    cursor: pointer;
+    font-size: 0.85rem;
+}
+
+.import-error {
+    color: var(--color-error, #f85149);
+    font-size: 0.8rem;
+    margin-top: 6px;
+}
+
 @media (max-width: 380px) {
     .win-message {
         padding: 24px;

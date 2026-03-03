@@ -121,28 +121,36 @@ export function findHiddenSingleInBox(board: Board): Hint | null {
 }
 
 export function getHint(board: Board, solution: Board): Hint | null {
-    // Check if board is already fully solved
+    const hasEmpty = board.some((row) => row.some((v) => v === 0))
+    if (!hasEmpty) return null
+
+    const hint =
+        findNakedSingle(board) ??
+        findHiddenSingleInRow(board) ??
+        findHiddenSingleInColumn(board) ??
+        findHiddenSingleInBox(board)
+    if (hint) return hint
+
+    // Fallback: most constrained cell (MRV heuristic — fewest candidates)
+    let bestCell: { row: number; col: number } | null = null
+    let bestCount = 10
     for (let r = 0; r < 9; r++) {
         for (let c = 0; c < 9; c++) {
-            if (board[r][c] === 0) {
-                // There are empty cells, proceed with strategies
-                const hint =
-                    findNakedSingle(board) ??
-                    findHiddenSingleInRow(board) ??
-                    findHiddenSingleInColumn(board) ??
-                    findHiddenSingleInBox(board)
-                if (hint) return hint
-
-                // Fallback: use solution
-                const value = solution[r][c]
-                return {
-                    cell: { row: r, col: c },
-                    value,
-                    strategy: "fallback",
-                    explanation: `Try placing ${value} here.`,
-                }
+            if (board[r][c] !== 0) continue
+            const count = getCandidates(board, r, c).length
+            if (count < bestCount) {
+                bestCount = count
+                bestCell = { row: r, col: c }
             }
         }
     }
-    return null
+    if (!bestCell) return null
+    const value = solution[bestCell.row][bestCell.col]
+    const noun = bestCount === 1 ? "candidate" : "candidates"
+    return {
+        cell: bestCell,
+        value,
+        strategy: "fallback",
+        explanation: `This cell has only ${bestCount} ${noun} — try placing ${value} here.`,
+    }
 }
