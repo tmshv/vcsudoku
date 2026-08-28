@@ -12,7 +12,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Run all tests:** `npm run test` (runs `vitest run`)
 - **Run a single test file:** `npx vitest run src/sudoku.test.ts`
 - **Run tests matching a pattern:** `npx vitest run -t "pattern"`
-- **Generate PWA icons:** `npm run generate-pwa-assets` (runs `pwa-assets-generator --preset minimal public/icon.svg`, outputs to `public/`)
+- **Generate PWA icons:** `npm run generate-pwa-assets` (runs `pwa-assets-generator`, configured by `pwa-assets.config.ts`, source `public/icon.svg`, outputs to `public/`)
 
 ## Tech Stack
 

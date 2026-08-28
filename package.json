@@ -12,7 +12,7 @@
         "preview": "vite preview",
         "coverage": "vitest run --coverage",
         "test": "vitest run",
-        "generate-pwa-assets": "pwa-assets-generator --preset minimal public/icon.svg"
+        "generate-pwa-assets": "pwa-assets-generator"
     },
     "dependencies": {
         "lucide-react": "^0.576.0",
