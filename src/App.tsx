@@ -27,6 +27,7 @@ function App() {
                     <div className="spacer" />
                     <SettingsPanel
                         difficulty={game.difficulty}
+                        customCells={game.customCells}
                         onNewGame={game.newGame}
                     />
                 </div>

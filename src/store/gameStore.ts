@@ -8,6 +8,12 @@ import {
     isValidPlacement,
     solve,
 } from "../sudoku"
+import {
+    clampCustomCells,
+    setCustomCells,
+    setDifficulty,
+    settings,
+} from "./settingsStore"
 
 export interface CellPos {
     row: number
@@ -63,7 +69,7 @@ function initGame(difficulty: Difficulty) {
     return { puzzle, solution }
 }
 
-const firstGame = initGame("easy")
+const firstGame = initGame(settings.difficulty)
 
 export const gameData = proxyWithHistory<GameData>(
     createInitialData(firstGame.puzzle),
@@ -71,7 +77,7 @@ export const gameData = proxyWithHistory<GameData>(
 )
 
 export const gameUI = proxy<GameUI>(
-    createInitialUI(firstGame.solution, firstGame.puzzle, "easy"),
+    createInitialUI(firstGame.solution, firstGame.puzzle, settings.difficulty),
 )
 
 function cellKey(row: number, col: number) {
@@ -213,6 +219,7 @@ export function toggleNotesMode() {
 }
 
 export function newGame(difficulty: Difficulty) {
+    setDifficulty(difficulty)
     const { puzzle, solution } = initGame(difficulty)
 
     const data = createInitialData(puzzle)
@@ -236,7 +243,9 @@ export function newGame(difficulty: Difficulty) {
 }
 
 export function newCustomGame(cellsToRemove: number) {
-    const { puzzle, solution } = generateCustomPuzzle(cellsToRemove)
+    const cells = clampCustomCells(cellsToRemove)
+    setCustomCells(cells)
+    const { puzzle, solution } = generateCustomPuzzle(cells)
 
     const data = createInitialData(puzzle)
     gameData.value.board = data.board
@@ -245,13 +254,15 @@ export function newCustomGame(cellsToRemove: number) {
     gameData.history.index = -1
     gameData.saveHistory()
 
-    const ui = createInitialUI(solution, puzzle, "easy")
+    // gameUI.difficulty keeps the last named difficulty: it is what a new game
+    // falls back to, while customCells drives what the header shows.
+    const ui = createInitialUI(solution, puzzle, gameUI.difficulty)
     gameUI.solution = ui.solution
     gameUI.initial = ui.initial
     gameUI.selected = ui.selected
     gameUI.elapsed = 0
     gameUI.notesMode = false
-    gameUI.customCells = Math.max(20, Math.min(64, cellsToRemove))
+    gameUI.customCells = cells
 }
 
 export function loadBoard(puzzle: number[][]): boolean {
