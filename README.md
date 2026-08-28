@@ -22,6 +22,8 @@ A fully playable browser-based Sudoku with three difficulty levels, pencil notes
 - **Win detection** — Fill it all in correctly and get a satisfying overlay
 - **Completion animations** — Blue flash on cells when a row, column, or box is completed; matching blue flash on the number pad button when all 9 of a digit are placed
 - **Dark / Light / System theme** — Click the ⚙ gear icon (top-right) to switch themes; system mode follows your OS preference and persists across sessions
+- **Current difficulty on screen** — The gear button in the header shows what you're playing (`Easy`, `Master`, or `Custom · 42` during a custom game), and clicking it opens the settings
+- **Settings persist** — Theme, difficulty, and your custom cells-removed value are saved to localStorage; reopening the game deals a fresh puzzle at the difficulty you last played
 
 ## Tech Stack
 
@@ -54,12 +56,12 @@ src/
   store/
     gameStore.ts      — Two Valtio proxies: board data (with undo/redo) and UI state
     jumpStore.ts      — Jump mode state machine
-    themeStore.ts     — Theme state (system/light/dark), localStorage persistence
+    settingsStore.ts  — Persisted settings (theme, difficulty, custom cells) in localStorage
   components/
     Board.tsx         — 9x9 grid with highlighting and overlay support
     Cell.tsx          — A single cell (values, notes, overlays, or emptiness)
     NumberPad.tsx     — Number buttons, notes toggle, erase, undo/redo
-    SettingsPanel.tsx — Fixed gear button + theme picker panel
+    SettingsPanel.tsx — Gear button showing current difficulty + settings panel
     StatusBar.tsx     — Contextual shortcut hints
   index.css           — All the styles, one file, no regrets
 ```

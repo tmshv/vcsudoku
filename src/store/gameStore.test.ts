@@ -47,6 +47,7 @@ import {
     gameUI,
     moveSelection,
     moveSelectionToBlock,
+    newCustomGame,
     newGame,
     placeNumber,
     redo,
@@ -56,6 +57,7 @@ import {
     toggleNotesMode,
     undo,
 } from "./gameStore"
+import { settings } from "./settingsStore"
 
 beforeEach(() => {
     newGame("easy")
@@ -653,5 +655,31 @@ describe("fillAllCandidateNotes", () => {
         const historyIndexBefore = gameData.history.index
         fillAllCandidateNotes()
         expect(gameData.history.index).toBe(historyIndexBefore)
+    })
+})
+
+describe("settings persistence", () => {
+    it("newGame persists the chosen difficulty", () => {
+        newGame("hard")
+        expect(settings.difficulty).toBe("hard")
+        expect(gameUI.difficulty).toBe("hard")
+    })
+
+    it("newCustomGame persists the cells-removed value", () => {
+        newCustomGame(33)
+        expect(settings.customCells).toBe(33)
+        expect(gameUI.customCells).toBe(33)
+    })
+
+    it("newCustomGame clamps out-of-range values before persisting", () => {
+        newCustomGame(200)
+        expect(settings.customCells).toBe(64)
+        expect(gameUI.customCells).toBe(64)
+    })
+
+    it("newCustomGame leaves the persisted difficulty untouched", () => {
+        newGame("master")
+        newCustomGame(40)
+        expect(settings.difficulty).toBe("master")
     })
 })

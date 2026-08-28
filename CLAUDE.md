@@ -26,7 +26,7 @@ This is a browser-based Sudoku game. All source code is in `src/`.
 
 - **`store/gameStore.ts`** — Two Valtio proxies: `gameData` (proxyWithHistory wrapping board + notes, enables undo/redo) and `gameUI` (plain proxy for solution, initial, selected, difficulty, elapsed, notesMode). All game mutations and derived computations (`computeErrors`, `computeWon`) live here. Exports `fillCandidateNotes` (fills selected cell's notes with valid candidates), `fillLastDigit` (fills cells that have only one candidate), `fillAllCandidateNotes` (fills all empty non-initial cells), `newCustomGame(cellsToRemove)`, and `loadBoard(puzzle)` (validates and loads an externally provided puzzle).
 - **`store/jumpStore.ts`** — Jump mode state machine (Valtio proxy). Space activates, two digits (row, col) jump to a cell, Escape cancels. Provides `getOverlay` for cell coordinate labels.
-- **`store/themeStore.ts`** — Theme state (system/light/dark) with localStorage persistence.
+- **`store/settingsStore.ts`** — Persisted user settings (theme, difficulty, custom cells-removed value) in a single `vcsudoku-settings` localStorage entry, with per-field validation and a one-time migration from the legacy `vcsudoku-theme` key. Also owns `applyTheme` and the `prefers-color-scheme` listener. `gameStore` reads `settings.difficulty` for the first puzzle and writes back on `newGame`/`newCustomGame`.
 
 ### Hooks
 
@@ -73,6 +73,8 @@ This is a browser-based Sudoku game. All source code is in `src/`.
 - `useGame.undo.test.ts` tests undo/redo through the hook with the same mock setup.
 - `store/gameStore.test.ts` tests store mutations and undo/redo directly against the Valtio proxies (no React rendering).
 - `store/jumpStore.test.ts` tests the jump mode state machine: activation, digit feeding, cell selection, and cancellation.
+- `store/gameStore.boot.test.ts` tests module-init behaviour (first puzzle uses the persisted difficulty) via `vi.resetModules()` + a dynamic `import()`.
+- `src/test-setup.ts` (wired via `setupFiles` in `vite.config.ts`) stubs `window.matchMedia`, which jsdom does not implement and `settingsStore` calls at import time.
 
 ### Valtio testing notes
 

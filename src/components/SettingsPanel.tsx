@@ -3,30 +3,42 @@ import { useEffect, useRef, useState } from "react"
 import { useSnapshot } from "valtio"
 import { boardFromAscii } from "../export"
 import { loadBoard, newCustomGame } from "../store/gameStore"
-import { setTheme, THEME_OPTIONS, themeState } from "../store/themeStore"
+import {
+    DIFFICULTIES,
+    MAX_CUSTOM_CELLS,
+    MIN_CUSTOM_CELLS,
+    setTheme,
+    settings,
+    THEME_OPTIONS,
+} from "../store/settingsStore"
 import type { Difficulty } from "../sudoku"
-
-const DIFFICULTIES: Difficulty[] = [
-    "easy",
-    "medium",
-    "hard",
-    "master",
-    "expert",
-]
 
 interface SettingsPanelProps {
     difficulty: Difficulty
+    customCells: number | null
     onNewGame: (d: Difficulty) => void
 }
 
-export function SettingsPanel({ difficulty, onNewGame }: SettingsPanelProps) {
+function difficultyLabel(
+    difficulty: Difficulty,
+    customCells: number | null,
+): string {
+    if (customCells !== null) return `Custom · ${customCells}`
+    return difficulty.charAt(0).toUpperCase() + difficulty.slice(1)
+}
+
+export function SettingsPanel({
+    difficulty,
+    customCells,
+    onNewGame,
+}: SettingsPanelProps) {
+    const snap = useSnapshot(settings)
     const [open, setOpen] = useState(false)
-    const [customValue, setCustomValue] = useState(50)
+    const [customValue, setCustomValue] = useState(snap.customCells)
     const [importOpen, setImportOpen] = useState(false)
     const [importText, setImportText] = useState("")
     const [importError, setImportError] = useState(false)
     const panelRef = useRef<HTMLDivElement>(null)
-    const snap = useSnapshot(themeState)
 
     useEffect(() => {
         if (!open) return
@@ -50,6 +62,9 @@ export function SettingsPanel({ difficulty, onNewGame }: SettingsPanelProps) {
                 onClick={() => setOpen((v) => !v)}
                 aria-label="Settings"
             >
+                <span className="settings-difficulty">
+                    {difficultyLabel(difficulty, customCells)}
+                </span>
                 <Settings size={16} aria-hidden="true" />
             </button>
             {open && (
@@ -89,8 +104,8 @@ export function SettingsPanel({ difficulty, onNewGame }: SettingsPanelProps) {
                         <input
                             id="custom-cells"
                             type="number"
-                            min={20}
-                            max={64}
+                            min={MIN_CUSTOM_CELLS}
+                            max={MAX_CUSTOM_CELLS}
                             value={customValue}
                             onChange={(e) =>
                                 setCustomValue(Number(e.target.value))

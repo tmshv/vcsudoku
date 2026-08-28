@@ -546,8 +546,9 @@ h1 {
 }
 
 .settings-gear {
-    width: 36px;
+    min-width: 36px;
     height: 36px;
+    padding: 0 8px;
     border: 1px solid transparent;
     border-radius: var(--radius-btn);
     background: transparent;
@@ -556,7 +557,14 @@ h1 {
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 6px;
     transition: all 0.15s;
+}
+
+.settings-difficulty {
+    font-size: 0.85rem;
+    font-weight: 500;
+    white-space: nowrap;
 }
 
 .settings-gear:hover,
