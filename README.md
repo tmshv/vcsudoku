@@ -25,7 +25,7 @@ A fully playable browser-based Sudoku with three difficulty levels, pencil notes
 
 ## Tech Stack
 
-React 19 + TypeScript 5.9 + Vite 7 + Valtio 2 for state management (with valtio-history for undo/redo). Tested with Vitest and @testing-library/react. No CSS framework. A thin `useGame` hook facades two Valtio proxies, and somehow it all holds together.
+React 19 + TypeScript 7 + Vite 8 + Valtio 2 for state management (with valtio-history for undo/redo). Tested with Vitest and @testing-library/react. No CSS framework. A thin `useGame` hook facades two Valtio proxies, and somehow it all holds together.
 
 ## Getting Started
 
