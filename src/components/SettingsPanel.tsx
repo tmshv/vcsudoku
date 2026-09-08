@@ -7,6 +7,7 @@ import {
     DIFFICULTIES,
     MAX_CUSTOM_CELLS,
     MIN_CUSTOM_CELLS,
+    setCountMistakes,
     setTheme,
     settings,
     THEME_OPTIONS,
@@ -65,7 +66,7 @@ export function SettingsPanel({
                 <span className="settings-difficulty">
                     {difficultyLabel(difficulty, customCells)}
                 </span>
-                <Settings size={16} aria-hidden="true" />
+                <Settings size={18} aria-hidden="true" />
             </button>
             {open && (
                 <div className="settings-panel">
@@ -98,6 +99,15 @@ export function SettingsPanel({
                             </button>
                         ))}
                     </div>
+                    <h3>Mistakes</h3>
+                    <label className="settings-toggle">
+                        <input
+                            type="checkbox"
+                            checked={snap.countMistakes}
+                            onChange={(e) => setCountMistakes(e.target.checked)}
+                        />
+                        <span>Count mistakes</span>
+                    </label>
                     <h3>Custom Difficulty</h3>
                     <div className="custom-difficulty">
                         <label htmlFor="custom-cells">Cells removed</label>

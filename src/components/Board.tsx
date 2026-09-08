@@ -169,6 +169,7 @@ export function Board({
                             }
                             isLineComplete={isLineComplete}
                             notes={notes[r][c]}
+                            highlightNote={selectedValue}
                             overlay={overlay?.(r, c)}
                             onClick={() => onSelectCell({ row: r, col: c })}
                         />

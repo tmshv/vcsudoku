@@ -138,6 +138,36 @@ describe("settingsStore customCells", () => {
     })
 })
 
+describe("settingsStore countMistakes", () => {
+    it("defaults to false when localStorage is empty", async () => {
+        const { settings } = await import("./settingsStore")
+        expect(settings.countMistakes).toBe(false)
+    })
+
+    it("setCountMistakes persists and updates state", async () => {
+        const { settings, setCountMistakes } = await import("./settingsStore")
+        setCountMistakes(true)
+        expect(settings.countMistakes).toBe(true)
+        expect(stored().countMistakes).toBe(true)
+
+        setCountMistakes(false)
+        expect(settings.countMistakes).toBe(false)
+        expect(stored().countMistakes).toBe(false)
+    })
+
+    it("loads a persisted value on module init", async () => {
+        localStorage.setItem(KEY, JSON.stringify({ countMistakes: true }))
+        const { settings } = await import("./settingsStore")
+        expect(settings.countMistakes).toBe(true)
+    })
+
+    it("falls back to false for a non-boolean stored value", async () => {
+        localStorage.setItem(KEY, JSON.stringify({ countMistakes: "yes" }))
+        const { settings } = await import("./settingsStore")
+        expect(settings.countMistakes).toBe(false)
+    })
+})
+
 describe("settingsStore loading", () => {
     it("falls back to defaults when the stored blob is not valid JSON", async () => {
         localStorage.setItem(KEY, "{not json")
@@ -145,6 +175,7 @@ describe("settingsStore loading", () => {
         expect(settings.theme).toBe("system")
         expect(settings.difficulty).toBe("easy")
         expect(settings.customCells).toBe(50)
+        expect(settings.countMistakes).toBe(false)
     })
 
     it("falls back to defaults when the stored blob is not an object", async () => {

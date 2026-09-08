@@ -1,20 +1,29 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
-const { mockSetTheme, mockSettings, mockNewCustomGame } = vi.hoisted(() => {
-    const mockSettings = {
-        theme: "system",
-        difficulty: "easy",
-        customCells: 50,
-    }
-    const mockSetTheme = vi.fn()
-    const mockNewCustomGame = vi.fn()
-    return { mockSettings, mockSetTheme, mockNewCustomGame }
-})
+const { mockSetTheme, mockSetCountMistakes, mockSettings, mockNewCustomGame } =
+    vi.hoisted(() => {
+        const mockSettings = {
+            theme: "system",
+            difficulty: "easy",
+            customCells: 50,
+            countMistakes: false,
+        }
+        const mockSetTheme = vi.fn()
+        const mockSetCountMistakes = vi.fn()
+        const mockNewCustomGame = vi.fn()
+        return {
+            mockSettings,
+            mockSetTheme,
+            mockSetCountMistakes,
+            mockNewCustomGame,
+        }
+    })
 
 vi.mock("../store/settingsStore", () => ({
     settings: mockSettings,
     setTheme: mockSetTheme,
+    setCountMistakes: mockSetCountMistakes,
     THEME_OPTIONS: [
         { label: "System", value: "system" },
         { label: "Light", value: "light" },
@@ -42,6 +51,7 @@ beforeEach(() => {
     mockSettings.theme = "system"
     mockSettings.difficulty = "easy"
     mockSettings.customCells = 50
+    mockSettings.countMistakes = false
 })
 
 describe("SettingsPanel", () => {
@@ -175,6 +185,52 @@ describe("SettingsPanel difficulty label", () => {
         )
         const gear = screen.getByRole("button", { name: "Settings" })
         expect(gear.textContent).toContain("Hard")
+    })
+})
+
+describe("SettingsPanel count mistakes", () => {
+    it("is unchecked by default", () => {
+        render(
+            <SettingsPanel
+                difficulty="easy"
+                customCells={null}
+                onNewGame={vi.fn()}
+            />,
+        )
+        fireEvent.click(screen.getByRole("button", { name: "Settings" }))
+        const toggle = screen.getByLabelText(
+            "Count mistakes",
+        ) as HTMLInputElement
+        expect(toggle.checked).toBe(false)
+    })
+
+    it("reflects the persisted value", () => {
+        mockSettings.countMistakes = true
+        render(
+            <SettingsPanel
+                difficulty="easy"
+                customCells={null}
+                onNewGame={vi.fn()}
+            />,
+        )
+        fireEvent.click(screen.getByRole("button", { name: "Settings" }))
+        const toggle = screen.getByLabelText(
+            "Count mistakes",
+        ) as HTMLInputElement
+        expect(toggle.checked).toBe(true)
+    })
+
+    it("toggling calls setCountMistakes", () => {
+        render(
+            <SettingsPanel
+                difficulty="easy"
+                customCells={null}
+                onNewGame={vi.fn()}
+            />,
+        )
+        fireEvent.click(screen.getByRole("button", { name: "Settings" }))
+        fireEvent.click(screen.getByLabelText("Count mistakes"))
+        expect(mockSetCountMistakes).toHaveBeenCalledWith(true)
     })
 })
 

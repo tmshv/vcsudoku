@@ -45,6 +45,7 @@ import {
     findLastOneCell,
     gameData,
     gameUI,
+    loadBoard,
     moveSelection,
     moveSelectionToBlock,
     newCustomGame,
@@ -225,6 +226,73 @@ describe("placeNumber", () => {
         placeNumber(5)
         expect(gameData.value.notes[0][0]).toEqual([])
         expect(gameData.value.notes[0][1]).not.toContain(5)
+    })
+})
+
+describe("mistake counter", () => {
+    it("starts at zero", () => {
+        expect(gameUI.mistakes).toBe(0)
+    })
+
+    it("does not count a correct placement", () => {
+        selectCell({ row: 0, col: 0 })
+        placeNumber(5)
+        expect(gameUI.mistakes).toBe(0)
+    })
+
+    it("counts a wrong placement", () => {
+        selectCell({ row: 0, col: 0 })
+        placeNumber(9)
+        expect(gameUI.mistakes).toBe(1)
+    })
+
+    it("counts each distinct wrong digit separately", () => {
+        selectCell({ row: 0, col: 0 })
+        placeNumber(9)
+        placeNumber(7)
+        expect(gameUI.mistakes).toBe(2)
+    })
+
+    it("does not re-count the same wrong digit typed twice", () => {
+        selectCell({ row: 0, col: 0 })
+        placeNumber(9)
+        placeNumber(9)
+        expect(gameUI.mistakes).toBe(1)
+    })
+
+    it("does not count placements the store rejects", () => {
+        // Initial cell: the placement is a no-op, so it is not a mistake.
+        selectCell({ row: 0, col: 2 })
+        placeNumber(1)
+        expect(gameUI.mistakes).toBe(0)
+    })
+
+    it("is not decremented by undo", () => {
+        selectCell({ row: 0, col: 0 })
+        placeNumber(9)
+        undo()
+        expect(gameUI.mistakes).toBe(1)
+    })
+
+    it("resets on newGame", () => {
+        selectCell({ row: 0, col: 0 })
+        placeNumber(9)
+        newGame("medium")
+        expect(gameUI.mistakes).toBe(0)
+    })
+
+    it("resets on newCustomGame", () => {
+        selectCell({ row: 0, col: 0 })
+        placeNumber(9)
+        newCustomGame(30)
+        expect(gameUI.mistakes).toBe(0)
+    })
+
+    it("resets on loadBoard", () => {
+        selectCell({ row: 0, col: 0 })
+        placeNumber(9)
+        expect(loadBoard(makePuzzle())).toBe(true)
+        expect(gameUI.mistakes).toBe(0)
     })
 })
 
