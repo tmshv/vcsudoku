@@ -28,7 +28,7 @@ button:focus-visible {
 
 :root {
     /* Layout */
-    --cell-size: min(10vw, 60px);
+    --cell-size: min(calc((100vw - 48px) / 9), 60px);
     --board-gap: 1px;
     --border-box: 2px;
 
@@ -148,8 +148,160 @@ body {
 
     .app {
         overflow-y: auto;
+        max-height: 100dvh;
         -webkit-overflow-scrolling: touch;
     }
+}
+
+/* Proof overlays are separate from selection and from the player's notes. */
+.cell.cell-hint-unit {
+    background: color-mix(in srgb, var(--color-primary) 13%, var(--color-cell));
+}
+
+.cell.cell-hint-excluded {
+    background: color-mix(
+        in srgb,
+        var(--color-text-error) 10%,
+        var(--color-cell)
+    );
+}
+
+.cell.cell-hint-evidence {
+    background: color-mix(in srgb, var(--color-hint) 22%, var(--color-cell));
+    box-shadow: inset 0 0 0 2px var(--color-hint);
+}
+
+.cell.cell-hint-focus {
+    background: color-mix(in srgb, var(--color-primary) 24%, var(--color-cell));
+    box-shadow: inset 0 0 0 2px var(--color-primary);
+}
+
+.cell .note-hint {
+    color: var(--color-text);
+    font-weight: 700;
+}
+
+.cell .note-eliminated {
+    color: var(--color-text-error);
+    text-decoration: line-through;
+    text-decoration-thickness: 2px;
+    font-weight: 700;
+}
+
+.hint-exclusion-mark {
+    color: var(--color-text-error);
+    opacity: 0.7;
+    font-size: calc(var(--cell-size) * 0.35);
+}
+
+.hint-panel {
+    width: 100%;
+    margin-top: 14px;
+    padding: 14px;
+    border: 1px solid var(--color-hint-border);
+    border-radius: var(--radius-panel);
+    background: var(--color-surface);
+    color: var(--color-text);
+}
+
+.hint-header,
+.hint-actions,
+.hint-legend {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.hint-header {
+    justify-content: space-between;
+}
+
+.hint-eyebrow {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+}
+
+.hint-panel h2 {
+    font-size: 1rem;
+    margin-bottom: 8px;
+}
+
+.hint-panel p {
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+.hint-panel .hint-caption {
+    color: var(--color-text-muted);
+    font-size: 0.72rem;
+    margin-top: 8px;
+}
+
+.hint-legend {
+    flex-wrap: wrap;
+    margin-top: 12px;
+    font-size: 0.72rem;
+}
+
+.hint-legend > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.hint-swatch {
+    width: 12px;
+    height: 12px;
+    display: inline-block;
+}
+
+.hint-swatch-unit {
+    background: color-mix(in srgb, var(--color-primary) 13%, var(--color-cell));
+    border: 1px solid var(--color-border);
+}
+
+.hint-swatch-focus {
+    border: 2px solid var(--color-primary);
+}
+
+.hint-swatch-evidence {
+    border: 2px solid var(--color-hint);
+}
+
+.hint-legend s {
+    color: var(--color-text-error);
+}
+
+.hint-actions {
+    margin-top: 12px;
+    flex-wrap: wrap;
+}
+
+.hint-panel button {
+    min-height: 40px;
+    padding: 8px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-btn);
+    background: var(--color-surface);
+    color: var(--color-text);
+    cursor: pointer;
+}
+
+.hint-panel button:disabled {
+    opacity: 0.4;
+    cursor: default;
+}
+
+.hint-panel .hint-primary {
+    background: var(--color-primary);
+    color: var(--color-text-on-primary);
+    border-color: var(--color-primary);
+}
+
+.hint-panel .hint-close {
+    border: none;
+    min-width: 40px;
+    font-size: 1.2rem;
 }
 
 /* Every item in the header is set at --font-header, so one shared line box puts
@@ -253,6 +405,10 @@ h1 {
 
 /* Cells */
 .cell {
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    min-width: 0;
     position: relative;
     display: flex;
     align-items: center;
@@ -304,8 +460,12 @@ h1 {
    it covers the grid lines instead of being fenced in by them. */
 .cell-selected {
     background: var(--color-selected);
-    outline: 2px solid var(--color-primary);
     z-index: 1;
+}
+
+.board .cell.cell-selected {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 0;
 }
 
 .cell-error {

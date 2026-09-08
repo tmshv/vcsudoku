@@ -63,9 +63,11 @@ function useStatusHint(): StatusHint | null {
     if (hint.hint !== null) {
         return {
             label: "HINT",
-            text: hint.hint.explanation,
+            text: `Step ${hint.step + 1} of ${hint.hint.steps.length}`,
             shortcuts: [
-                { key: "v", action: "next hint" },
+                ...(hint.step < hint.hint.steps.length - 1
+                    ? [{ key: "v", action: "explain next" }]
+                    : []),
                 { key: "Esc", action: "dismiss" },
             ],
         }

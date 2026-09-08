@@ -1,4 +1,5 @@
 import { useEffect, useLayoutEffect, useRef } from "react"
+import { type HintStep, inUnit } from "../hint"
 import { useFlashAnimation } from "../hooks/useFlashAnimation"
 import { computeFull } from "../store/gameStore"
 import type { CellPos } from "../useGame"
@@ -17,6 +18,7 @@ interface BoardProps {
     notes: readonly (readonly number[])[][]
     onSelectCell: (pos: CellPos) => void
     overlay?: (row: number, col: number) => CellOverlay | null
+    hintStep?: Readonly<HintStep>
 }
 
 export function Board({
@@ -27,6 +29,7 @@ export function Board({
     notes,
     onSelectCell,
     overlay,
+    hintStep,
 }: BoardProps) {
     const selectedValue = selected ? board[selected.row][selected.col] : 0
 
@@ -161,8 +164,8 @@ export function Board({
                             value={value}
                             isInitial={initial[r][c]}
                             isSelected={isSelected}
-                            isHighlighted={isHighlighted}
-                            isSameNumber={isSameNumber}
+                            isHighlighted={!hintStep && isHighlighted}
+                            isSameNumber={!hintStep && isSameNumber}
                             isError={isError}
                             isDigitComplete={
                                 value !== 0 && completedDigits.has(value)
@@ -171,6 +174,52 @@ export function Board({
                             notes={notes[r][c]}
                             highlightNote={selectedValue}
                             overlay={overlay?.(r, c)}
+                            position={{ row: r, col: c }}
+                            hint={
+                                hintStep
+                                    ? {
+                                          unit: hintStep.units.some((unit) =>
+                                              inUnit({ row: r, col: c }, unit),
+                                          ),
+                                          focus: hintStep.focus.some(
+                                              (cell) =>
+                                                  cell.row === r &&
+                                                  cell.col === c,
+                                          ),
+                                          evidence: hintStep.evidence.some(
+                                              (cell) =>
+                                                  cell.row === r &&
+                                                  cell.col === c,
+                                          ),
+                                          excluded: hintStep.excluded.some(
+                                              (cell) =>
+                                                  cell.row === r &&
+                                                  cell.col === c,
+                                          ),
+                                          candidates: hintStep.candidates
+                                              .filter(
+                                                  (cell) =>
+                                                      cell.row === r &&
+                                                      cell.col === c,
+                                              )
+                                              .map((cell) => cell.value),
+                                          emphasized: hintStep.emphasized
+                                              .filter(
+                                                  (cell) =>
+                                                      cell.row === r &&
+                                                      cell.col === c,
+                                              )
+                                              .map((cell) => cell.value),
+                                          eliminated: hintStep.eliminated
+                                              .filter(
+                                                  (cell) =>
+                                                      cell.row === r &&
+                                                      cell.col === c,
+                                              )
+                                              .map((cell) => cell.value),
+                                      }
+                                    : undefined
+                            }
                             onClick={() => onSelectCell({ row: r, col: c })}
                         />
                     )

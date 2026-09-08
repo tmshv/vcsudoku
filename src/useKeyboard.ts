@@ -24,6 +24,21 @@ import { handleKey as jumpHandleKey } from "./store/jumpStore"
 export function useKeyboard() {
     useEffect(() => {
         const handleKey = (e: KeyboardEvent) => {
+            const target = e.target
+            if (target instanceof HTMLElement) {
+                if (
+                    target.closest(
+                        "input, textarea, select, [contenteditable='true']",
+                    )
+                )
+                    return
+                // Let native buttons (including hint controls) activate by keyboard.
+                if (
+                    target.closest("button:not(.cell)") &&
+                    (e.key === " " || e.key === "Enter")
+                )
+                    return
+            }
             if (jumpHandleKey(e)) return
             if (findHandleKey(e)) return
 

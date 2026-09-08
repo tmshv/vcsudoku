@@ -1,10 +1,12 @@
 import { useSnapshot } from "valtio"
 import { Board } from "./components/Board"
+import { HintPanel } from "./components/HintPanel"
 import { NumberPad } from "./components/NumberPad"
 import { SettingsPanel } from "./components/SettingsPanel"
 import { StatusBar } from "./components/StatusBar"
+import { findState } from "./store/findStore"
 import { fillCandidateNotes, fillLastDigit } from "./store/gameStore"
-import { showHint } from "./store/hintStore"
+import { hintState, showHint } from "./store/hintStore"
 import { getOverlay, jumpState } from "./store/jumpStore"
 import { settings } from "./store/settingsStore"
 import { useGame } from "./useGame"
@@ -18,6 +20,8 @@ function formatTime(seconds: number) {
 function App() {
     const game = useGame()
     const jump = useSnapshot(jumpState)
+    const find = useSnapshot(findState)
+    const hint = useSnapshot(hintState)
     const settingsSnap = useSnapshot(settings)
 
     return (
@@ -51,7 +55,14 @@ function App() {
                     notes={game.notes}
                     onSelectCell={game.selectCell}
                     overlay={jump.active ? getOverlay : undefined}
+                    hintStep={
+                        !jump.active && !find.active
+                            ? hint.hint?.steps[hint.step]
+                            : undefined
+                    }
                 />
+
+                {!jump.active && !find.active && <HintPanel />}
 
                 <NumberPad
                     onNumber={(n) =>

@@ -17,7 +17,7 @@ A fully playable browser-based Sudoku with three difficulty levels, pencil notes
 - **Timer** — So you know exactly how long you spent procrastinating
 - **Keyboard navigation** — Arrow keys, vim h/j/k/l, and Shift+Arrow / H/J/K/L for block-level jumps
 - **Undo/Redo** — Ctrl+Z / Ctrl+Shift+Z (or Ctrl+Y), because mistakes happen
-- **Hint** — Press `v` or click the Hint button to get a logical hint; the board selects the target cell and explains why the move is valid; press Esc to dismiss
+- **Hint walkthroughs** — Press `v` or click Hint to explore a logical move step by step, with highlighted rows, columns, boxes, supporting digits, and crossed-out candidates. Supports singles, pointing/claiming, naked/hidden pairs and triples, and X-Wing. Apply the conclusion as an undoable move, or close with Esc. Available on touch screens too; answer reveals are explicit and labeled. See [how hints work](docs/hints.md).
 - **Jump mode** — Press Space, then two digits (row, col) to teleport to any cell
 - **ASCII export** — Press `p` to copy the current board as a bordered ASCII grid to the clipboard
 - **Status bar** — Contextual shortcut hints so you don't have to memorize everything
