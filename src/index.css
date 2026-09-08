@@ -50,7 +50,6 @@ button:focus-visible {
     /* Cell states */
     --color-selected: #bbdefb;
     --color-highlighted: #e3f2fd;
-    --color-same-number: #d3d8f0;
     --color-error: #ffcdd2;
 
     /* Text */
@@ -89,7 +88,6 @@ button:focus-visible {
     --color-cell: #1c2030;
     --color-selected: #1e3a5c;
     --color-highlighted: #1a2d3d;
-    --color-same-number: #252550;
     --color-error: #4a1a1a;
     --color-text: #c9d1d9;
     --color-text-muted: #8b949e;
@@ -448,12 +446,11 @@ h1 {
     animation: line-complete-flash 0.7s ease-out;
 }
 
+/* The only ambient tint on the board: it answers "does this cell share a row,
+   column or box with the cursor". Matching digits are marked by the accent chip
+   instead, so the two questions never compete for the same colour. */
 .cell-highlighted {
     background: var(--color-highlighted);
-}
-
-.cell-same-number {
-    background: var(--color-same-number);
 }
 
 /* The cursor ring sits outside the cell box and paints above its neighbours, so
@@ -491,19 +488,34 @@ h1 {
     line-height: 1;
 }
 
-.note {
+.note,
+.value-match {
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 50%;
+    line-height: 1;
+}
+
+.note {
     width: calc(var(--cell-size) * 0.3);
     height: calc(var(--cell-size) * 0.3);
-    border-radius: 50%;
     color: var(--color-text-notes);
     font-weight: 500;
 }
 
-/* The note matching the selected digit, circled so it reads at a glance. */
-.note-match {
+/* Sized off the value glyph the way .note is sized off the note glyph, so both
+   chips wear the same ring of breathing room around their digit. */
+.value-match {
+    width: calc(var(--cell-size) * 0.6);
+    height: calc(var(--cell-size) * 0.6);
+}
+
+/* One chip marks the selected digit everywhere it appears — pencilled as a note
+   or placed as a value. Same fill, same weight, so the board has a single
+   highlight language instead of a loud one for notes and a pale one for values. */
+.note-match,
+.value-match {
     background: var(--color-primary);
     color: var(--color-text-on-primary);
     font-weight: 700;
@@ -553,13 +565,21 @@ h1 {
     border-color: var(--color-primary);
 }
 
+/* Unavailable is said with a recessed surface, not with transparency: fading the
+   whole button to 30% takes the label down with it and leaves nothing readable. */
 .num-btn:disabled {
-    opacity: 0.3;
+    background: var(--color-surface-raised);
+    border-color: var(--color-border);
+    color: var(--color-text-dim);
     cursor: default;
     pointer-events: none;
 }
 
-.num-btn-complete {
+/* A finished digit is an achievement, not a dead control, so it keeps the accent
+   fill and full-strength type even though the button no longer takes a press.
+   Listed after :disabled and matching its specificity so it wins the cascade. */
+.num-btn-complete,
+.num-btn-complete:disabled {
     background: color-mix(
         in srgb,
         var(--color-primary) 15%,

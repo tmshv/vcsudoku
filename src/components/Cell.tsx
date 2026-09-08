@@ -48,7 +48,6 @@ export function Cell({
 }: CellProps) {
     let className = "cell"
     if (isSelected) className += " cell-selected"
-    else if (isSameNumber) className += " cell-same-number"
     else if (isHighlighted) className += " cell-highlighted"
     if (
         isDigitComplete &&
@@ -68,6 +67,10 @@ export function Cell({
 
     const displayedNotes = hint ? hint.candidates : notes
     const showNotes = value === 0 && displayedNotes.length > 0
+    // An error cell keeps its red: the mistake outranks the "same digit" cue.
+    // A displayed hint suppresses matching upstream (Board clears isSameNumber),
+    // so the chip never competes with the hint's own focus and evidence marks.
+    const matchesSelection = isSameNumber && !isError
     const label = `R${position.row + 1}C${position.col + 1}: ${value || "empty"}${hint?.focus ? ", hint focus" : ""}${hint?.evidence ? ", supporting digit" : ""}${hint?.excluded ? ", excluded position" : ""}${showNotes ? `, candidates ${displayedNotes.join(", ")}` : ""}${hint?.eliminated.length ? `, exclude ${hint.eliminated.join(", ")}` : ""}`
 
     return (
@@ -84,7 +87,11 @@ export function Cell({
             title={label}
         >
             {value !== 0 ? (
-                value
+                matchesSelection ? (
+                    <span className="value-match">{value}</span>
+                ) : (
+                    value
+                )
             ) : showNotes ? (
                 <span className="cell-notes">
                     {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => {

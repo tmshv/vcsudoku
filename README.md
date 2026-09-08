@@ -10,7 +10,7 @@ A fully playable browser-based Sudoku with three difficulty levels, pencil notes
 
 - **Three difficulty levels** — Easy, Medium, Hard (removing 45, 51, or 56 cells respectively, because why not)
 - **Pencil notes** — Toggle notes mode (N key) and jot down candidates like a civilized person. While it's on, the Notes button fills in with a checkmark and a `NOTES` badge sits next to the timer, so you always know which mode swallowed your keypress
-- **Matching notes get circled** — Select a cell holding a 5 and every pencilled 5 elsewhere on the board is circled in the accent color, no squinting required
+- **The selected digit gets chipped** — Select a cell holding a 5 and every other 5 on the board is marked with the same accent chip, whether it sits in a cell or is pencilled into notes. One highlight language, not a loud one for notes and a pale one for placed digits. The soft blue tint is left to mean one thing only: this cell shares a row, column, or box with the cursor
 - **Auto-cleanup** — Notes get cleaned up automatically when you place a number, because the code is more organized than you are
 - **Error highlighting** — Checks your numbers against the actual solution, so there's no fooling it
 - **Mistake counter (optional)** — Off by default. Turn on *Count mistakes* under the ⚙ gear to get a running `✕ N` tally in the header. Each wrong digit counts once; undo doesn't take it back, and a new game resets it
@@ -27,6 +27,7 @@ A fully playable browser-based Sudoku with three difficulty levels, pencil notes
 - **Current difficulty on screen** — The gear button in the header shows what you're playing (`Easy`, `Master`, or `Custom · 42` during a custom game), and clicking it opens the settings
 - **Settings persist** — Theme, difficulty, mistake counting, and your custom cells-removed value are saved to localStorage; reopening the game deals a fresh puzzle at the difficulty you last played
 - **Readable at a glance** — Board digits are 60% of the cell, and every text color in both themes clears WCAG AA contrast against the backgrounds it actually lands on
+- **Disabled still means readable** — Buttons you can't press (a finished digit, Redo with nothing to redo) drop to a recessed surface with dimmed type instead of fading to a 30% ghost; a completed digit keeps its accent fill and full-strength label, because finishing one is an achievement, not a dead control
 
 ## Tech Stack
 
