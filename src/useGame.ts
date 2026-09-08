@@ -64,6 +64,7 @@ export function useGame() {
         notes: dataSnap.value.notes as number[][][],
         notesMode: uiSnap.notesMode,
         customCells: uiSnap.customCells,
+        mistakes: uiSnap.mistakes,
         canUndo: gameData.history.index > 0,
         canRedo: gameData.history.index < gameData.history.nodes.length - 1,
         selectCell,

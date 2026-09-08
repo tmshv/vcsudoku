@@ -9,9 +9,11 @@ A fully playable browser-based Sudoku with three difficulty levels, pencil notes
 ## Features
 
 - **Three difficulty levels** — Easy, Medium, Hard (removing 45, 51, or 56 cells respectively, because why not)
-- **Pencil notes** — Toggle notes mode (N key) and jot down candidates like a civilized person
+- **Pencil notes** — Toggle notes mode (N key) and jot down candidates like a civilized person. While it's on, the Notes button fills in with a checkmark and a `NOTES` badge sits next to the timer, so you always know which mode swallowed your keypress
+- **Matching notes get circled** — Select a cell holding a 5 and every pencilled 5 elsewhere on the board is circled in the accent color, no squinting required
 - **Auto-cleanup** — Notes get cleaned up automatically when you place a number, because the code is more organized than you are
 - **Error highlighting** — Checks your numbers against the actual solution, so there's no fooling it
+- **Mistake counter (optional)** — Off by default. Turn on *Count mistakes* under the ⚙ gear to get a running `✕ N` tally in the header. Each wrong digit counts once; undo doesn't take it back, and a new game resets it
 - **Timer** — So you know exactly how long you spent procrastinating
 - **Keyboard navigation** — Arrow keys, vim h/j/k/l, and Shift+Arrow / H/J/K/L for block-level jumps
 - **Undo/Redo** — Ctrl+Z / Ctrl+Shift+Z (or Ctrl+Y), because mistakes happen
@@ -23,7 +25,8 @@ A fully playable browser-based Sudoku with three difficulty levels, pencil notes
 - **Completion animations** — Blue flash on cells when a row, column, or box is completed; matching blue flash on the number pad button when all 9 of a digit are placed
 - **Dark / Light / System theme** — Click the ⚙ gear icon (top-right) to switch themes; system mode follows your OS preference and persists across sessions
 - **Current difficulty on screen** — The gear button in the header shows what you're playing (`Easy`, `Master`, or `Custom · 42` during a custom game), and clicking it opens the settings
-- **Settings persist** — Theme, difficulty, and your custom cells-removed value are saved to localStorage; reopening the game deals a fresh puzzle at the difficulty you last played
+- **Settings persist** — Theme, difficulty, mistake counting, and your custom cells-removed value are saved to localStorage; reopening the game deals a fresh puzzle at the difficulty you last played
+- **Readable at a glance** — Board digits are 60% of the cell, and every text color in both themes clears WCAG AA contrast against the backgrounds it actually lands on
 
 ## Tech Stack
 

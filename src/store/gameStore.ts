@@ -33,6 +33,9 @@ interface GameUI {
     elapsed: number
     notesMode: boolean
     customCells: number | null
+    /** Wrong digits entered this game. Always tracked; displayed only when the
+     * countMistakes setting is on. Undo does not take a mistake back. */
+    mistakes: number
 }
 
 function emptyNotes(): number[][][] {
@@ -61,6 +64,7 @@ function createInitialUI(
         elapsed: 0,
         notesMode: false,
         customCells: null,
+        mistakes: 0,
     }
 }
 
@@ -171,6 +175,15 @@ export function placeNumber(num: number) {
     if (computeWon(gameData.value.board, gameUI.solution)) return
     if (gameUI.initial[sel.row][sel.col]) return
 
+    // Count only digits that are both wrong and new to the cell, so retyping the
+    // same wrong digit does not inflate the tally.
+    if (
+        num !== gameUI.solution[sel.row][sel.col] &&
+        num !== gameData.value.board[sel.row][sel.col]
+    ) {
+        gameUI.mistakes += 1
+    }
+
     gameData.value.board[sel.row][sel.col] = num
     gameData.value.notes[sel.row][sel.col] = []
 
@@ -240,6 +253,7 @@ export function newGame(difficulty: Difficulty) {
     gameUI.elapsed = ui.elapsed
     gameUI.notesMode = ui.notesMode
     gameUI.customCells = null
+    gameUI.mistakes = 0
 }
 
 export function newCustomGame(cellsToRemove: number) {
@@ -263,6 +277,7 @@ export function newCustomGame(cellsToRemove: number) {
     gameUI.elapsed = 0
     gameUI.notesMode = false
     gameUI.customCells = cells
+    gameUI.mistakes = 0
 }
 
 export function loadBoard(puzzle: number[][]): boolean {
@@ -282,6 +297,7 @@ export function loadBoard(puzzle: number[][]): boolean {
     gameUI.elapsed = 0
     gameUI.notesMode = false
     gameUI.customCells = null
+    gameUI.mistakes = 0
     return true
 }
 

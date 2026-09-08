@@ -6,6 +6,7 @@ import { StatusBar } from "./components/StatusBar"
 import { fillCandidateNotes, fillLastDigit } from "./store/gameStore"
 import { showHint } from "./store/hintStore"
 import { getOverlay, jumpState } from "./store/jumpStore"
+import { settings } from "./store/settingsStore"
 import { useGame } from "./useGame"
 
 function formatTime(seconds: number) {
@@ -17,6 +18,7 @@ function formatTime(seconds: number) {
 function App() {
     const game = useGame()
     const jump = useSnapshot(jumpState)
+    const settingsSnap = useSnapshot(settings)
 
     return (
         <>
@@ -24,6 +26,15 @@ function App() {
                 <div className="app-header">
                     <h1>Sudoku</h1>
                     <div className="timer">{formatTime(game.elapsed)}</div>
+                    {settingsSnap.countMistakes && (
+                        <div
+                            className="mistakes"
+                            title={`${game.mistakes} mistake${game.mistakes === 1 ? "" : "s"}`}
+                        >
+                            ✕ {game.mistakes}
+                        </div>
+                    )}
+                    {game.notesMode && <div className="notes-badge">Notes</div>}
                     <div className="spacer" />
                     <SettingsPanel
                         difficulty={game.difficulty}

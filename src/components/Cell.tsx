@@ -10,6 +10,9 @@ interface CellProps {
     isDigitComplete: boolean
     isLineComplete: boolean
     notes: readonly number[]
+    /** Digit of the current selection, circled when it appears in this cell's
+     * notes. 0 when nothing relevant is selected. */
+    highlightNote: number
     overlay?: CellOverlay | null
     onClick: () => void
 }
@@ -24,6 +27,7 @@ export function Cell({
     isDigitComplete,
     isLineComplete,
     notes,
+    highlightNote,
     overlay,
     onClick,
 }: CellProps) {
@@ -53,9 +57,22 @@ export function Cell({
                 value
             ) : showNotes ? (
                 <div className="cell-notes">
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
-                        <span key={n}>{notes.includes(n) ? n : ""}</span>
-                    ))}
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => {
+                        if (!notes.includes(n)) return <span key={n} />
+                        return (
+                            <span key={n}>
+                                <span
+                                    className={
+                                        n === highlightNote
+                                            ? "note note-match"
+                                            : "note"
+                                    }
+                                >
+                                    {n}
+                                </span>
+                            </span>
+                        )
+                    })}
                 </div>
             ) : (
                 ""

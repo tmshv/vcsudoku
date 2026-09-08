@@ -95,9 +95,13 @@ export function NumberPad({
             <div className="num-row">
                 <button
                     type="button"
-                    className={`num-btn num-action${notesMode ? " notes-active" : ""}`}
+                    className={`num-btn num-action notes-btn${notesMode ? " notes-active" : ""}`}
+                    aria-pressed={notesMode}
                     onClick={onToggleNotesMode}
                 >
+                    <span className="notes-check" aria-hidden="true">
+                        ✓
+                    </span>
                     Notes
                 </button>
                 <button

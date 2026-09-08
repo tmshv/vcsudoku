@@ -28,12 +28,15 @@ export interface Settings {
     difficulty: Difficulty
     /** Last value used in the custom difficulty input. */
     customCells: number
+    /** Show the running mistake count in the header. */
+    countMistakes: boolean
 }
 
 const DEFAULTS: Settings = {
     theme: "system",
     difficulty: "easy",
     customCells: 50,
+    countMistakes: false,
 }
 
 function isTheme(value: unknown): value is Theme {
@@ -101,6 +104,10 @@ function loadSettings(): { settings: Settings; migrated: boolean } {
             customCells: isCustomCells(stored.customCells)
                 ? stored.customCells
                 : DEFAULTS.customCells,
+            countMistakes:
+                typeof stored.countMistakes === "boolean"
+                    ? stored.countMistakes
+                    : DEFAULTS.countMistakes,
         },
         migrated,
     }
@@ -114,6 +121,7 @@ function persist(): void {
                 theme: settings.theme,
                 difficulty: settings.difficulty,
                 customCells: settings.customCells,
+                countMistakes: settings.countMistakes,
             }),
         )
     } catch {
@@ -146,6 +154,11 @@ export function setDifficulty(difficulty: Difficulty): void {
 
 export function setCustomCells(cells: number): void {
     settings.customCells = clampCustomCells(cells)
+    persist()
+}
+
+export function setCountMistakes(enabled: boolean): void {
+    settings.countMistakes = enabled
     persist()
 }
 
