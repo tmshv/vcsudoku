@@ -47,8 +47,10 @@ button:focus-visible {
     --color-board-bg: #344861;
     --color-cell: #ffffff;
 
-    /* Cell states */
-    --color-selected: #bbdefb;
+    /* Cell states. Both tints are --color-primary thinned against the cell, and
+       the note chip is that same accent undiluted, so the cursor, its matching
+       digits and the circled notes all read as one colour at three strengths. */
+    --color-match: #bbdefb;
     --color-highlighted: #e3f2fd;
     --color-error: #ffcdd2;
 
@@ -86,7 +88,7 @@ button:focus-visible {
     --color-surface-raised: #2a2a3a;
     --color-board-bg: #2d3548;
     --color-cell: #1c2030;
-    --color-selected: #1e3a5c;
+    --color-match: #1e3a5c;
     --color-highlighted: #1a2d3d;
     --color-error: #4a1a1a;
     --color-text: #c9d1d9;
@@ -446,17 +448,23 @@ h1 {
     animation: line-complete-flash 0.7s ease-out;
 }
 
-/* The only ambient tint on the board: it answers "does this cell share a row,
-   column or box with the cursor". Matching digits are marked by the accent chip
-   instead, so the two questions never compete for the same colour. */
+/* The lighter step of the accent: "this cell shares a row, column or box with
+   the cursor". Context only, so it sits well below the match tint. */
 .cell-highlighted {
     background: var(--color-highlighted);
+}
+
+/* The cursor and every other cell holding its digit take the same tint, because
+   they answer the same question — where is this digit. Nothing distinguishes the
+   cursor but the ring, which is exactly what a cursor should be. */
+.cell-selected,
+.cell-same-number {
+    background: var(--color-match);
 }
 
 /* The cursor ring sits outside the cell box and paints above its neighbours, so
    it covers the grid lines instead of being fenced in by them. */
 .cell-selected {
-    background: var(--color-selected);
     z-index: 1;
 }
 
@@ -488,34 +496,22 @@ h1 {
     line-height: 1;
 }
 
-.note,
-.value-match {
+.note {
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
-    line-height: 1;
-}
-
-.note {
     width: calc(var(--cell-size) * 0.3);
     height: calc(var(--cell-size) * 0.3);
+    border-radius: 50%;
+    line-height: 1;
     color: var(--color-text-notes);
     font-weight: 500;
 }
 
-/* Sized off the value glyph the way .note is sized off the note glyph, so both
-   chips wear the same ring of breathing room around their digit. */
-.value-match {
-    width: calc(var(--cell-size) * 0.6);
-    height: calc(var(--cell-size) * 0.6);
-}
-
-/* One chip marks the selected digit everywhere it appears — pencilled as a note
-   or placed as a value. Same fill, same weight, so the board has a single
-   highlight language instead of a loud one for notes and a pale one for values. */
-.note-match,
-.value-match {
+/* A note is too small for a background tint to register, so it gets the accent at
+   full strength instead. Same colour as the cell tints, just undiluted — placed
+   digits need no circle, since a whole cell of tint is signal enough. */
+.note-match {
     background: var(--color-primary);
     color: var(--color-text-on-primary);
     font-weight: 700;

@@ -10,7 +10,7 @@ A fully playable browser-based Sudoku with three difficulty levels, pencil notes
 
 - **Three difficulty levels** — Easy, Medium, Hard (removing 45, 51, or 56 cells respectively, because why not)
 - **Pencil notes** — Toggle notes mode (N key) and jot down candidates like a civilized person. While it's on, the Notes button fills in with a checkmark and a `NOTES` badge sits next to the timer, so you always know which mode swallowed your keypress
-- **The selected digit gets chipped** — Select a cell holding a 5 and every other 5 on the board is marked with the same accent chip, whether it sits in a cell or is pencilled into notes. One highlight language, not a loud one for notes and a pale one for placed digits. The soft blue tint is left to mean one thing only: this cell shares a row, column, or box with the cursor
+- **One accent, three strengths** — Select a cell holding a 5 and every other 5 on the board takes the same tint the cursor is sitting on; a 5 pencilled into notes gets that same accent undiluted, as a small circle, because a note is too small for a tint to register. Row, column, and box get a lighter step of the one color. Nothing on the board is highlighted in a second hue, and the cursor is told apart by its ring rather than by a color of its own
 - **Auto-cleanup** — Notes get cleaned up automatically when you place a number, because the code is more organized than you are
 - **Error highlighting** — Checks your numbers against the actual solution, so there's no fooling it
 - **Mistake counter (optional)** — Off by default. Turn on *Count mistakes* under the ⚙ gear to get a running `✕ N` tally in the header. Each wrong digit counts once; undo doesn't take it back, and a new game resets it
