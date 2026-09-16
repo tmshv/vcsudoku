@@ -18,10 +18,20 @@ function stored() {
     return JSON.parse(localStorage.getItem(KEY) ?? "{}")
 }
 
+/** jsdom starts from a bare document, so the tag from index.html is absent. */
+function addThemeColorMeta() {
+    const meta = document.createElement("meta")
+    meta.name = "theme-color"
+    meta.content = "#000000"
+    document.head.append(meta)
+    return meta
+}
+
 beforeEach(() => {
     vi.resetModules()
     localStorage.clear()
     document.documentElement.removeAttribute("data-theme")
+    document.querySelector('meta[name="theme-color"]')?.remove()
     mockMatchMedia(false)
 })
 
@@ -68,6 +78,32 @@ describe("settingsStore theme", () => {
 
         setTheme("light")
         expect(stored().theme).toBe("light")
+    })
+
+    it("setTheme updates the theme-color meta to match the page background", async () => {
+        const meta = addThemeColorMeta()
+        const { setTheme } = await import("./settingsStore")
+
+        setTheme("dark")
+        expect(meta.content).toBe("#121212")
+
+        setTheme("light")
+        expect(meta.content).toBe("#f5f5f5")
+    })
+
+    it("setTheme('system') picks the theme-color for the resolved scheme", async () => {
+        mockMatchMedia(true)
+        const meta = addThemeColorMeta()
+        const { setTheme } = await import("./settingsStore")
+
+        setTheme("system")
+        expect(meta.content).toBe("#121212")
+    })
+
+    it("setTheme works when no theme-color meta is present", async () => {
+        const { setTheme } = await import("./settingsStore")
+        expect(() => setTheme("dark")).not.toThrow()
+        expect(document.documentElement.dataset.theme).toBe("dark")
     })
 
     it("loads persisted theme on module init", async () => {

@@ -14,7 +14,7 @@ export default defineConfig({
                 name: "Sudoku",
                 short_name: "Sudoku",
                 description: "A browser-based Sudoku game",
-                theme_color: "#344861",
+                theme_color: "#f5f5f5",
                 background_color: "#f5f5f5",
                 display: "standalone",
                 icons: [

@@ -88,7 +88,7 @@ The game is a Progressive Web App (PWA) and can be installed on your device for 
 3. Tap **Add to Home Screen** (or **Install app**)
 4. Tap **Add** — the icon will appear on your home screen
 
-Once installed, the app launches without browser chrome and works fully offline.
+Once installed, the app launches without browser chrome and works fully offline. On iOS the status bar is opaque and tinted to match the current theme — the app no longer draws underneath it, which keeps iOS 26+ from washing the header out with its Liquid Glass blur. If you installed the app before this change, delete the home screen icon and add it again: iOS caches the launch configuration with the icon.
 
 ## License
 
