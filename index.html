@@ -3,10 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no, maximum-scale=1" />
-    <meta name="theme-color" content="#344861" />
+    <!-- Kept in sync with --color-bg by applyTheme() in src/store/settingsStore.ts. -->
+    <meta name="theme-color" content="#f5f5f5" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <!-- No apple-mobile-web-app-status-bar-style: the "black-translucent" value
+         puts page pixels under the status bar, and from iOS 26 the system fills
+         that inset with a Liquid Glass blur band that bleeds over the header.
+         The default opaque status bar insets the web view instead. -->
     <meta name="apple-mobile-web-app-title" content="Sudoku" />
     <link rel="icon" type="image/png" sizes="64x64" href="/pwa-64x64.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon-180x180.png" />

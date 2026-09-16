@@ -129,6 +129,17 @@ function persist(): void {
     }
 }
 
+/**
+ * iOS paints the status bar in the theme colour, so it has to track the page
+ * background. Must match `--color-bg` for each theme in `index.css`; a
+ * `prefers-color-scheme` media query on the meta tag would not, since the theme
+ * can be overridden away from the OS preference.
+ */
+const THEME_COLORS: Record<"light" | "dark", string> = {
+    light: "#f5f5f5",
+    dark: "#121212",
+}
+
 export function applyTheme(theme: Theme): void {
     let resolved: "light" | "dark"
     if (theme === "system") {
@@ -139,6 +150,11 @@ export function applyTheme(theme: Theme): void {
         resolved = theme
     }
     document.documentElement.dataset.theme = resolved
+
+    const meta = document.querySelector('meta[name="theme-color"]')
+    if (meta !== null) {
+        meta.setAttribute("content", THEME_COLORS[resolved])
+    }
 }
 
 export function setTheme(theme: Theme): void {
